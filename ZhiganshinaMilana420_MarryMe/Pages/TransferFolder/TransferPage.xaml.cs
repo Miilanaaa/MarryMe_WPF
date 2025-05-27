@@ -1,59 +1,150 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ZhiganshinaMilana420_MarryMe.DB;
-using ZhiganshinaMilana420_MarryMe.Pages.RestaurantForder;
 
 namespace ZhiganshinaMilana420_MarryMe.Pages.TransferFolder
 {
-    /// <summary>
-    /// Логика взаимодействия для TransferPage.xaml
-    /// </summary>
     public partial class TransferPage : Page
     {
+        private List<Transfer> allTransfers;
+        private List<Transfer> filteredTransfers;
+        private List<Transfer> displayedTransfers;
+
+        private int currentPage = 1;
+        private int itemsPerPage = 6;
+        private int totalPages;
+
         public static List<TransferType> typees { get; set; }
         public static List<TransferPhoto> transferPhotos = new List<TransferPhoto>();
-        public static List<Transfer> transfers {  get; set; }
+
         public TransferPage()
         {
             InitializeComponent();
-            transfers = new List<Transfer>(DbConnection.MarryMe.Transfer.ToList());
-            TransferLV.ItemsSource = transfers;
+
+            allTransfers = new List<Transfer>(DbConnection.MarryMe.Transfer.ToList());
             transferPhotos = new List<TransferPhoto>(DbConnection.MarryMe.TransferPhoto.ToList());
-            
+
             typees = new List<TransferType>(DbConnection.MarryMe.TransferType.ToList());
             typees.Insert(0, new TransferType() { Name = "Все" });
             FilterCb.SelectedIndex = 0;
             this.DataContext = this;
+
+            ApplyFiltersAndSort(); // Initialize with all transfers
         }
 
         public void Refresh()
         {
-            var filterRestaurant = DbConnection.MarryMe.Transfer.ToList();
+            ApplyFiltersAndSort();
+        }
+
+        private void ApplyFiltersAndSort()
+        {
             var category = FilterCb.SelectedItem as TransferType;
 
-            if (category != null && category.Id != 0)
+            // Apply filters
+            filteredTransfers = allTransfers
+                .Where(a => category == null || category.Id == 0 || a.TransferTypeId == category.Id)
+                .Where(a => SearchTb.Text.Length == 0 || a.Name.ToLower().Contains(SearchTb.Text.Trim().ToLower()))
+                .ToList();
+
+            // Update pagination
+            currentPage = 1;
+            InitializePagination();
+        }
+
+        private void InitializePagination()
+        {
+            // Calculate total pages
+            totalPages = (int)Math.Ceiling((double)filteredTransfers.Count / itemsPerPage);
+
+            // Clear pagination panel
+            PaginationPanel.Children.Clear();
+            PaginationPanel.Children.Add(PrevPageBtn);
+
+            // Create page buttons
+            for (int i = 1; i <= totalPages; i++)
             {
-                filterRestaurant = filterRestaurant.Where(c => c.TransferTypeId == category.Id).ToList();
+                var pageBtn = new Button
+                {
+                    Content = i.ToString(),
+                    Width = 40,
+                    Height = 40,
+                    FontSize = 15,
+                    Margin = new Thickness(5, 0, 5, 0),
+                    Tag = i
+                };
+                pageBtn.Click += PageBtn_Click;
+
+                if (i == currentPage)
+                {
+                    pageBtn.Background = Brushes.LightGray;
+                }
+
+                PaginationPanel.Children.Add(pageBtn);
             }
 
-            if (SearchTb.Text.Length > 0)
-            {
-                filterRestaurant = filterRestaurant.Where(r => r.Name.ToLower().Contains(SearchTb.Text.Trim().ToLower())).ToList();
-            }
-            TransferLV.ItemsSource = filterRestaurant;
+            PaginationPanel.Children.Add(NextPageBtn);
+
+            LoadPageData();
         }
+
+        private void LoadPageData()
+        {
+            displayedTransfers = filteredTransfers
+                .Skip((currentPage - 1) * itemsPerPage)
+                .Take(itemsPerPage)
+                .ToList();
+
+            TransferLV.ItemsSource = displayedTransfers;
+
+            UpdatePaginationButtons();
+        }
+
+        private void UpdatePaginationButtons()
+        {
+            foreach (var child in PaginationPanel.Children)
+            {
+                if (child is Button btn && btn.Tag is int pageNumber)
+                {
+                    btn.Background = pageNumber == currentPage ? Brushes.LightGray : Brushes.Transparent;
+                }
+            }
+
+            PrevPageBtn.IsEnabled = currentPage > 1;
+            NextPageBtn.IsEnabled = currentPage < totalPages;
+        }
+
+        private void PageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is int pageNumber)
+            {
+                currentPage = pageNumber;
+                LoadPageData();
+            }
+        }
+
+        private void PrevPageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentPage > 1)
+            {
+                currentPage--;
+                LoadPageData();
+            }
+        }
+
+        private void NextPageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentPage < totalPages)
+            {
+                currentPage++;
+                LoadPageData();
+            }
+        }
+
         private void SearchTb_TextChanged(object sender, TextChangedEventArgs e)
         {
             Refresh();
@@ -88,7 +179,8 @@ namespace ZhiganshinaMilana420_MarryMe.Pages.TransferFolder
                     {
                         DbConnection.MarryMe.Transfer.Remove(transfer);
                         DbConnection.MarryMe.SaveChanges();
-                        NavigationService.Navigate(new TransferPage());
+                        allTransfers = new List<Transfer>(DbConnection.MarryMe.Transfer.ToList());
+                        Refresh();
                         MessageBox.Show("Трансфер успешно удалён!", "Информация", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                 }
@@ -98,6 +190,11 @@ namespace ZhiganshinaMilana420_MarryMe.Pages.TransferFolder
                     return;
                 }
             }
+        }
+
+        private void ExitBt_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new CollectionPage());
         }
     }
 }

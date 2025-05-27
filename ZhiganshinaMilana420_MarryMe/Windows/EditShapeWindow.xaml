@@ -9,8 +9,8 @@
         WindowStartupLocation="CenterScreen"
         MouseDown="Window_MouseDown"
         Title="Редактирование формы" 
-        Height="500" 
-        Width="400"
+        Height="520" 
+        Width="420"
         AllowsTransparency="True"
         Background="Transparent">
 

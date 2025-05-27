@@ -58,46 +58,55 @@
                                FontSize="20"
                                FontWeight="Bold"
                                Margin="0 0 0 5"/>
-                    <TextBox x:Name="NameGroomTb"
-                               Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                               FontSize="16"
-                               Margin="0 0 0 15"/>
+                    <Border Background="#F5F5F5" CornerRadius="5" Padding="5">
+                        <TextBlock x:Name="NameGroomTb"
+                                   FontSize="16"
+                                   Margin="0 0 0 15"
+                                   TextWrapping="Wrap"/>
+                    </Border>
 
                     <TextBlock Text="Невеста"
                                FontSize="20"
                                FontWeight="Bold"
                                Margin="0 0 0 5"/>
-                    <TextBox x:Name="NameBrideTb"
-                               Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                               FontSize="16"
-                               Margin="0 0 0 15"/>
+                    <Border Background="#F5F5F5" CornerRadius="5" Padding="5">
+                        <TextBlock x:Name="NameBrideTb"
+                                   FontSize="16"
+                                   Margin="0 0 0 15"
+                                   TextWrapping="Wrap"/>
+                    </Border>
 
                     <TextBlock Text="Дата мероприятия"
                                FontSize="20"
                                FontWeight="Bold"
                                Margin="0 0 0 5"/>
-                    <DatePicker x:Name="WeddingDateTb"
-                                Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-                                FontSize="16"
-                                Margin="0 0 0 15"/>
+                    <Border Background="#F5F5F5" CornerRadius="5" Padding="5">
+                        <TextBlock x:Name="WeddingDateTb"
+                                   FontSize="16"
+                                   Margin="0 0 0 15"
+                                   TextWrapping="Wrap"/>
+                    </Border>
 
                     <TextBlock Text="Желаемый бюджет"
                                FontSize="20"
                                FontWeight="Bold"
                                Margin="0 0 0 5"/>
-                    <TextBox x:Name="WeddingBudgetTb"
-                               Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                               FontSize="16"
-                               Margin="0 0 0 15"/>
-
+                    <Border Background="#F5F5F5" CornerRadius="5" Padding="5">
+                        <TextBlock x:Name="WeddingBudgetTb"
+                                   FontSize="16"
+                                   Margin="0 0 0 15"
+                                   TextWrapping="Wrap"/>
+                    </Border>
 
                     <TextBlock Text="Количество гостей"
                                FontSize="20"
                                FontWeight="Bold"
                                Margin="0 0 0 5"/>
-                    <TextBox x:Name="NumberGuestsTb"
-                               Style="{StaticResource MaterialDesignOutlinedTextBox}"
-                               FontSize="16"/>
+                    <Border Background="#F5F5F5" CornerRadius="5" Padding="5">
+                        <TextBlock x:Name="NumberGuestsTb"
+                                   FontSize="16"
+                                   TextWrapping="Wrap"/>
+                    </Border>
                 </StackPanel>
             </Border>
 
@@ -160,18 +169,22 @@
                                             <ColumnDefinition Width="200"/>
                                         </Grid.ColumnDefinitions>
 
-
                                         <TextBlock Text="{Binding Number}" 
                                                    Grid.Column="0"
-                                                   HorizontalAlignment="Center" Width="auto"/>
+                                                   HorizontalAlignment="Center" 
+                                                   TextWrapping="Wrap"/>
                                         <TextBlock Text="{Binding Category}" 
-                                                   Grid.Column="1"/>
+                                                   Grid.Column="1"
+                                                   TextWrapping="Wrap"/>
                                         <TextBlock Text="{Binding Id}" 
-                                                   Grid.Column="2"/>
+                                                   Grid.Column="2"
+                                                   TextWrapping="Wrap"/>
                                         <TextBlock Text="{Binding Price}" 
-                                                   Grid.Column="3"/>
+                                                   Grid.Column="3"
+                                                   TextWrapping="Wrap"/>
                                         <TextBlock Text="{Binding Date}" 
-                                                   Grid.Column="4"/>
+                                                   Grid.Column="4"
+                                                   TextWrapping="Wrap"/>
 
                                         <!-- Action Buttons - Fixed Position -->
                                         <StackPanel Grid.Column="5"
@@ -215,12 +228,14 @@
                                    FontSize="20"
                                    VerticalAlignment="Center"
                                    Margin="0 0 10 0"/>
-                        <TextBlock x:Name="FinalPriceTb"
-                                   FontSize="20"
-                                   VerticalAlignment="Center"
-                                   Margin="0 0 20 0"
-                                   Width="120"/>
-
+                        <Border Background="#F5F5F5" CornerRadius="5" Padding="5">
+                            <TextBlock x:Name="FinalPriceTb"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       Margin="0 0 20 0"
+                                       Width="120"
+                                       TextWrapping="Wrap"/>
+                        </Border>
 
                         <Button x:Name="SeatingNavigateBt"
                                 FontSize="16"

@@ -259,38 +259,47 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
 
             try
             {
-                var userinfo = DbConnection.MarryMe.Users.Where(i => i.Login == LoginTb.Text).FirstOrDefault();
-                if(userinfo == null)
+                // Проверяем, существует ли пользователь с таким логином (кроме текущего)
+                var existingUser = DbConnection.MarryMe.Users
+                    .FirstOrDefault(u => u.Login == LoginTb.Text && u.Id != contextUser.Id);
+
+                if (existingUser != null)
                 {
-                    // Обновление основных данных
-                    contextUser.Surname = SurnameTb.Text;
-                    contextUser.Name = NameTb.Text;
-                    contextUser.Patronymic = PatronymicTb.Text;
-                    contextUser.Login = LoginTb.Text;
-                    contextUser.Password = isPasswordVisible ? VisiblePasswordTb.Text : PasswordTb.Password;
-                    contextUser.Email = EmailTb.Text;
-
-                    // Обновление дат и финансов
-                    contextUser.BirthDate = BirthDateDp.SelectedDate.Value;
-
-                    // Обновление роли и пола
-
-                    contextUser.IdGender = GenderMen.IsChecked.GetValueOrDefault() ? 1 : 2;
-
-                    // Обновление фото
-                    if (photoBytes != null)
-                    {
-                        contextUser.Photo = photoBytes;
-                    }
-
-                    DbConnection.MarryMe.SaveChanges();
-                    MessageBox.Show("Данные успешно сохранены!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
-                    NavigationService.Navigate(new MenuPage(UserInfo.User));
+                    MessageBox.Show("Пользователь под таким логином уже существует, введите другой логин!",
+                                  "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
                 }
-                else
+
+                // Обновление основных данных
+                contextUser.Surname = SurnameTb.Text;
+                contextUser.Name = NameTb.Text;
+                contextUser.Patronymic = PatronymicTb.Text;
+                contextUser.Login = LoginTb.Text;
+                contextUser.Password = isPasswordVisible ? VisiblePasswordTb.Text : PasswordTb.Password;
+                contextUser.Email = EmailTb.Text;
+
+                // Обновление дат и финансов
+                contextUser.BirthDate = BirthDateDp.SelectedDate.Value;
+
+                // Обновление пола
+                contextUser.IdGender = GenderMen.IsChecked.GetValueOrDefault() ? 1 : 2;
+
+                // Обновление фото
+                if (photoBytes != null)
                 {
-                    MessageBox.Show("Пользователь под таким логином существует, введите другой логин!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                    contextUser.Photo = photoBytes;
                 }
+
+                DbConnection.MarryMe.SaveChanges();
+                MessageBox.Show("Данные успешно сохранены!", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Обновляем данные в UserInfo, если редактируется текущий пользователь
+                if (UserInfo.User != null && UserInfo.User.Id == contextUser.Id)
+                {
+                    UserInfo.User = contextUser;
+                }
+
+                NavigationService.Navigate(new MenuPage(UserInfo.User));
             }
             catch (Exception ex)
             {

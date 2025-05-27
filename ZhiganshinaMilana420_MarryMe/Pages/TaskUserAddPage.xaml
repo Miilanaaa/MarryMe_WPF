@@ -70,6 +70,7 @@
         <!-- Main Content - List of Employees -->
         <ListView x:Name="UsersLV"
                   Grid.Row="1"
+                  d:ItemsSource="{d:SampleData ItemCount=1}"
                   Margin="20"
                   Background="Transparent"
                   BorderThickness="0"
@@ -106,6 +107,7 @@
                             <Ellipse Width="100"
                                      Height="100"
                                      Grid.Column="0"
+                                     Margin="20 0 0 0"
                                      VerticalAlignment="Center">
                                 <Ellipse.Fill>
                                     <ImageBrush ImageSource="{Binding Photo}"
@@ -114,7 +116,7 @@
                             </Ellipse>
 
                             <!-- Employee Info -->
-                            <StackPanel Grid.Column="1" Margin="20 0 0 0">
+                            <StackPanel Grid.Column="1" Margin="50 0 0 0">
                                 <StackPanel Orientation="Horizontal">
                                     <TextBlock Text="ID:"
                                                FontWeight="Bold"/>
@@ -125,11 +127,18 @@
                                     <TextBlock Text="{Binding Role.Name}"
                                                Margin="5 0 0 0"/>
                                 </StackPanel>
-
-                                <TextBlock Text="{Binding FullName}"
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Surname}"
                                            FontSize="18"
                                            Margin="0 5 0 0"/>
-
+                                    <TextBlock Text="{Binding Name}"
+                                           FontSize="18"
+                                           Margin="10 5 0 0"/>
+                                    <TextBlock Text="{Binding Patronymic}"
+                                           FontSize="18"
+                                           Margin="10 5 0 0"/>
+                                </StackPanel>
+                                
                                 <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
                                     <TextBlock Text="Дата рождения:"
                                                FontWeight="Bold"/>
@@ -149,7 +158,8 @@
                             <!-- Action Buttons -->
                             <StackPanel Grid.Column="2"
                                         VerticalAlignment="Center"
-                                        Width="150">
+                                        Width="150"
+                                        Margin="0 0 100 0">
                                 <Button Content="+ задачи"
                                         Style="{StaticResource MaterialDesignOutlinedButton}"
                                         Margin="0 0 0 10"

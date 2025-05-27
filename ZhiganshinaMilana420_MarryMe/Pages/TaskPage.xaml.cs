@@ -1,51 +1,54 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.RightsManagement;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ZhiganshinaMilana420_MarryMe.DB;
-using ZhiganshinaMilana420_MarryMe.Pages.RestaurantForder;
 using ZhiganshinaMilana420_MarryMe.Windows;
 
 namespace ZhiganshinaMilana420_MarryMe.Pages
 {
-    /// <summary>
-    /// Логика взаимодействия для TaskPage.xaml
-    /// </summary>
     public partial class TaskPage : Page
     {
         public static List<TaskUsers> taskUsers { get; set; }
         Users contextUsers;
+
         public TaskPage(Users users)
         {
             InitializeComponent();
             contextUsers = users;
             DateTime today = DateTime.Today;
-            taskUsers = DbConnection.MarryMe.TaskUsers.Where(i => i.UserId == users.Id && i.DateEnd == today).ToList();
+            taskUsers = DbConnection.MarryMe.TaskUsers
+                .Where(i => i.UserId == users.Id && i.DateEnd == today)
+                .ToList();
             TaskUserLV.ItemsSource = taskUsers;
             DateTaskDp.Text = today.ToString();
-
             this.DataContext = this;
+
+            UpdateEmptyTaskImageVisibility();
         }
 
-        
+        private void UpdateEmptyTaskImageVisibility()
+        {
+            if (TaskUserLV.ItemsSource == null || !TaskUserLV.ItemsSource.Cast<object>().Any())
+            {
+                EmptyTaskImage.Visibility = Visibility.Visible;
+                TaskUserLV.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                EmptyTaskImage.Visibility = Visibility.Collapsed;
+                TaskUserLV.Visibility = Visibility.Visible;
+            }
+        }
 
         private void AddTaskUserBt_Click(object sender, RoutedEventArgs e)
         {
             AddTaskUserWindow addTaskUserWindow = new AddTaskUserWindow(contextUsers);
             addTaskUserWindow.Closed += (s, args) =>
             {
-                RefreshTaskList(); // Обновляем список при закрытии окна
+                RefreshTaskList();
+                UpdateEmptyTaskImageVisibility();
             };
             addTaskUserWindow.ShowDialog();
         }
@@ -57,36 +60,43 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
 
         private void SearchTb_TextChanged(object sender, TextChangedEventArgs e)
         {
-
+            // Реализация поиска, если нужно
         }
+
         private void DateTaskDp_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (DateTaskDp.SelectedDate == null)
-            {
-                return;
-            }
-            DateTime selectedDate = DateTaskDp.SelectedDate ?? DateTime.MinValue;
+            if (DateTaskDp.SelectedDate == null) return;
 
-            var filteredItems = DbConnection.MarryMe.TaskUsers.Where(i => i.DateEnd == selectedDate && i.UserId == contextUsers.Id).ToList();
+            DateTime selectedDate = DateTaskDp.SelectedDate ?? DateTime.MinValue;
+            var filteredItems = DbConnection.MarryMe.TaskUsers
+                .Where(i => i.DateEnd == selectedDate && i.UserId == contextUsers.Id)
+                .ToList();
             TaskUserLV.ItemsSource = filteredItems;
+
+            UpdateEmptyTaskImageVisibility();
         }
+
         public void RefreshTaskList()
         {
             if (DateTaskDp.SelectedDate != null)
             {
                 DateTime selectedDate = DateTaskDp.SelectedDate ?? DateTime.Today;
-                taskUsers = new List<TaskUsers>(DbConnection.MarryMe.TaskUsers
-                    .Where(i => i.DateEnd == selectedDate && i.UserId == contextUsers.Id).ToList());
-                TaskUserLV.ItemsSource = taskUsers;
+                taskUsers = DbConnection.MarryMe.TaskUsers
+                    .Where(i => i.DateEnd == selectedDate && i.UserId == contextUsers.Id)
+                    .ToList();
             }
             else
             {
                 DateTime today = DateTime.Today;
-                taskUsers = new List<TaskUsers>(DbConnection.MarryMe.TaskUsers
-                    .Where(i => i.DateEnd == today && i.UserId == contextUsers.Id).ToList());
-                TaskUserLV.ItemsSource = taskUsers;
+                taskUsers = DbConnection.MarryMe.TaskUsers
+                    .Where(i => i.DateEnd == today && i.UserId == contextUsers.Id)
+                    .ToList();
             }
+
+            TaskUserLV.ItemsSource = taskUsers;
+            UpdateEmptyTaskImageVisibility();
         }
+
         private void EditBt_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as Button;
@@ -94,7 +104,6 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
 
             if (task != null)
             {
-                // Проверяем, что текущий пользователь - администратор задачи
                 if (task.AdminId != UserInfo.User.Id)
                 {
                     MessageBox.Show("Вы можете редактировать только задачи, которые создали вы.",
@@ -104,7 +113,6 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
                     return;
                 }
 
-                // Проверяем, что дата задачи еще не прошла
                 if (task.DateEnd < DateTime.Today)
                 {
                     MessageBox.Show("Редактирование задач с прошедшей датой запрещено.",
@@ -118,15 +126,16 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
                 editTaskUsersWindow.Closed += (s, args) =>
                 {
                     RefreshTaskList();
+                    UpdateEmptyTaskImageVisibility();
                 };
                 editTaskUsersWindow.ShowDialog();
             }
         }
+
         private void DelateBt_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button button && button.DataContext is TaskUsers taskToDelete)
             {
-                // Проверяем, что текущий пользователь - администратор задачи
                 if (taskToDelete.AdminId != UserInfo.User.Id)
                 {
                     MessageBox.Show("Вы можете удалять только задачи, которые создали сами.",
@@ -136,7 +145,6 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
                     return;
                 }
 
-                // Проверяем, что дата задачи еще не прошла
                 if (taskToDelete.DateEnd < DateTime.Today)
                 {
                     MessageBox.Show("Удаление задач с прошедшей датой запрещено.",

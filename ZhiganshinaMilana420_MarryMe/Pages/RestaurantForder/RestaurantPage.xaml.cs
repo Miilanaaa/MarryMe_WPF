@@ -203,5 +203,10 @@ namespace ZhiganshinaMilana420_MarryMe.Pages.RestaurantForder
         {
             Refresh();
         }
+
+        private void ExitBt_Click(object sender, RoutedEventArgs e)
+        {
+            NavigationService.Navigate(new CollectionPage());
+        }
     }
 }

@@ -3,155 +3,205 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:local="clr-namespace:ZhiganshinaMilana420_MarryMe.Pages.RestaurantForder"
       mc:Ignorable="d" 
       d:DesignHeight="750" d:DesignWidth="1445"
-      Title="CardRestaurantPage">
-    <Grid Background="#EEEFEA">
-        <Grid Width="750" 
-              Height="750" 
-              HorizontalAlignment="Left" 
-              VerticalAlignment="Top">
-            <Image x:Name="CurrentImage"
-                   Stretch="UniformToFill"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
-        </Grid>
-        <TextBlock x:Name="PhotoCounter"
+      Title="Просмотр ресторана"
+      FontFamily="Segoe UI Light">
+
+    <Grid Background="#FFF9FB">
+        <!-- Фон с градиентом и легким узором -->
+        <Rectangle Fill="#FFF9FB"/>
+        <Path Data="M0,0 L1445,0 1445,750 Q722,850 0,750 Z" 
+               Fill="#909478" Opacity="0.05" Stretch="Fill"/>
+
+        <!-- Основной контейнер -->
+        <Grid>
+            <!-- Левая часть - изображение -->
+            <Border Width="730"
+                    Height="700"
+                    CornerRadius="20"
+                    Background="White"
                     HorizontalAlignment="Left"
-                    Margin="400 0 0 0"
-                    VerticalAlignment="Bottom"
-                    FontSize="30" Cursor=""/>
-        <Button Content="❮" 
-                FontSize="20" 
-                Width="50" 
-                Height="40" 
-                BorderBrush="Transparent"
-                Background="#60000000"
-                Opacity="0.7"
-                HorizontalAlignment="Left"
-                Click="PrevPhoto_Click">
-            <Button.Effect>
-                <DropShadowEffect ShadowDepth="4" 
-                                  BlurRadius="12" 
-                                  Color="#80000000" 
-                                  Opacity="0.9"/>
-            </Button.Effect>
-        </Button>
-        <Button Content="❯" 
-                FontSize="20" 
-                Width="50" 
-                Height="40"
-                BorderBrush="Transparent"
-                Background="#60000000"
-                Opacity="0.7"
-                HorizontalAlignment="Left"
-                Margin="700 0 0 0"
-                Click="NextPhoto_Click">
-            <Button.Effect>
-                <DropShadowEffect ShadowDepth="4" 
-                                  BlurRadius="12" 
-                                  Color="#80000000" 
-                                  Opacity="0.9"/>
-            </Button.Effect>
-        </Button>
-        <StackPanel Orientation="Vertical"
-                    Margin="0 60 0 0"
+                    VerticalAlignment="Top"
+                    Margin="30 30 0 0"
+                    Effect="{StaticResource MaterialDesignShadowDepth2}">
+                <Grid>
+                    <Image x:Name="CurrentImage"
+                           Stretch="Uniform"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           MaxWidth="700"
+                           MaxHeight="600"/>
+
+                    <!-- Кнопки навигации по фото -->
+                    <Button x:Name="PrevPhotoButton"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                            Content="{materialDesign:PackIcon Kind=ChevronLeft}"
+                            Width="50"
+                            Height="50"
+                            Background="#909478"
+                            BorderBrush="#909478"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Margin="20 0 0 0"
+                            Click="PrevPhoto_Click"
+                            ToolTip="Предыдущее фото"/>
+
+                    <Button x:Name="NextPhotoButton"
+                            Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                            Content="{materialDesign:PackIcon Kind=ChevronRight}"
+                            Width="50"
+                            Height="50"
+                            Background="#909478"
+                            BorderBrush="#909478"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Margin="0 0 20 0"
+                            Click="NextPhoto_Click"
+                            ToolTip="Следующее фото"/>
+
+                    <TextBlock x:Name="PhotoCounter"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Bottom"
+                               Margin="0 0 0 20"
+                               FontSize="20"
+                               Foreground="#909478"/>
+                </Grid>
+            </Border>
+
+            <!-- Правая часть - информация -->
+            <Border Width="600"
+                    Height="700"
+                    CornerRadius="20"
+                    Background="White"
                     HorizontalAlignment="Right"
                     VerticalAlignment="Top"
-                    Width="660" Cursor="">
-            <TextBlock x:Name="NameTb"
-                       HorizontalAlignment="Left"
-                       Margin="50 0 0 0"
-                       Width="300"
-                       Height="auto"
-                       TextWrapping="Wrap"
-                       FontSize="25"
-                       FontWeight="Bold"
-                       Foreground="#909478"/>
-            <TextBox Name="DescriptionTb"
-                     HorizontalAlignment="Left"
-                     Margin="50 20 0 0"
-                     Width="430"
-                     Height="300"
-                     TextWrapping="Wrap"
-                     FontSize="20"
-                     IsReadOnly="True"/>
-            <TextBox Name="AddressTb"
-                    HorizontalAlignment="Left"
-                    Margin="50 20 0 0"
-                    Width="430"
-                    Height="auto"
-                    TextWrapping="Wrap"
-                    FontSize="20"
-                    IsReadOnly="True"/>
-            <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock HorizontalAlignment="Left"
-                           Margin="50 10 0 0"
-                           Text="Вместительность"
-                           FontSize="20"/>
-                    <TextBox x:Name="CapacityTb"
-                             HorizontalAlignment="Left"
-                             Margin="10 10 0 0"
-                             Width="155"
-                             Height="30"
-                             FontSize="20"
-                             IsReadOnly="True"/>
+                    Margin="0 30 30 0"
+                    Effect="{StaticResource MaterialDesignShadowDepth2}">
+                <StackPanel Margin="30">
+                    <!-- Название -->
+                    <TextBlock x:Name="NameTb"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               Foreground="#909478"
+                               TextWrapping="Wrap"
+                               Margin="0 0 0 20"/>
+
+                    <!-- Описание -->
+                    <TextBox x:Name="DescriptionTb"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             FontSize="15"
+                             Height="200"
+                             Margin="0 0 0 20"
+                             TextWrapping="Wrap"
+                             IsReadOnly="True"
+                             VerticalScrollBarVisibility="Auto"
+                             BorderThickness="1"/>
+
+                    <!-- Адрес -->
+                    <TextBox x:Name="AddressTb"
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             FontSize="15"
+                             Height="60"
+                             Margin="0 0 0 20"
+                             TextWrapping="Wrap"
+                             IsReadOnly="True"
+                             VerticalScrollBarVisibility="Auto"
+                             BorderThickness="1"/>
+
+                    <!-- Вместимость -->
+                    <StackPanel Orientation="Horizontal" Margin="0 0 0 20">
+                        <TextBlock Text="Вместительность:"
+                                   FontSize="20"
+                                   VerticalAlignment="Center"/>
+                        <TextBox x:Name="CapacityTb"
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 FontSize="15"
+                                 Width="100"
+                                 Margin="10 0 0 0"
+                                 IsReadOnly="True"
+                                 BorderThickness="1"
+                                 Foreground="#909478"/>
+                        <TextBlock Text="чел."
+                                   FontSize="20"
+                                   VerticalAlignment="Center"
+                                   Margin="5 0 0 0"/>
+                    </StackPanel>
+
+                    <!-- Цены -->
+                    <StackPanel Orientation="Vertical" Margin="0 0 0 10">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Стоимость брони:"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"/>
+                            <TextBox x:Name="PriceTb"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     FontSize="15"
+                                     Width="100"
+                                     Margin="10 0 0 0"
+                                     IsReadOnly="True"
+                                     BorderThickness="1"
+                                     Foreground="#909478"/>
+                            <TextBlock Text="руб."
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       Margin="5 0 0 0"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0 10 0 0">
+                            <TextBlock Text="Цена за человека:"
+                                       FontSize="20"
+                                       VerticalAlignment="Center"/>
+                            <TextBox x:Name="MenuPriceTb"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     FontSize="14"
+                                     Width="100"
+                                     Margin="10 0 0 0"
+                                     BorderThickness="1"
+                                     TextChanged="MenuPriceTb_TextChanged"/>
+                            <TextBlock Text="руб."
+                                       FontSize="20"
+                                       VerticalAlignment="Center"
+                                       Margin="5 0 0 0"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Кнопка меню -->
+                    <Button x:Name="OpenMenuBt"
+                            Content="Открыть меню"
+                            Style="{StaticResource MaterialDesignOutlinedButton}"
+                            Width="150"
+                            Height="40"
+                            FontSize="14"
+                            HorizontalAlignment="Left"
+                            Click="OpenMenuBt_Click"
+                            Visibility="Collapsed"/>
+
+                    <!-- Кнопки действий -->
+                    <StackPanel Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                Margin="0 0 0 0">
+                        <Button x:Name="ExitBt"
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Width="150"
+                                Height="40"
+                                Content="Назад"
+                                Margin="0 0 20 0"
+                                Click="ExitBt_Click"/>
+
+                        <Button x:Name="ToBookBtt"
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                Background="#909478"
+                                BorderBrush="#909478"
+                                Width="150"
+                                Height="40"
+                                Content="Выбрать"
+                                Click="ToBookBtt_Click"/>
+                    </StackPanel>
                 </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock HorizontalAlignment="Left"
-                           Margin="50 10 0 0"
-                           Text="Стоимость брони ресторана"
-                           FontSize="20"/>
-                    <TextBox x:Name="PriceTb"
-                         HorizontalAlignment="Left"
-                         Margin="10 10 0 0"
-                         Width="155"
-                         Height="30"
-                         FontSize="20"
-                         IsReadOnly="True"/>
-                </StackPanel>
-            </StackPanel>
-            <StackPanel Orientation="Horizontal">
-                <TextBlock HorizontalAlignment="Left"
-                           Margin="50 70 0 0"
-                           Text="Стоимость за одного человека"
-                           FontSize="20"/>
-                <TextBox x:Name="MenuPriceTb"
-                         HorizontalAlignment="Left"
-                         Margin="10 70 0 0"
-                         Width="135"
-                         Height="30"
-                         FontSize="20"
-                         TextChanged="MenuPriceTb_TextChanged"/>
-            </StackPanel>
-            <Button x:Name="OpenMenuBt"
-                    Content="Открыть меню"
-                    Width="200"
-                    Height="40"
-                    FontSize="20"
-                    HorizontalAlignment="Left"
-                    Margin="50 20 0 0"
-                    Click="OpenMenuBt_Click"
-                    Visibility="Collapsed"/>
-        </StackPanel>
-        <Button Content="Выбрать"
-                Name="ToBookBtt"
-                Width="150"
-                Height="40"
-                FontSize="20"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Margin="30" Click="ToBookBtt_Click"/>
-        <Button x:Name="ExitBt"
-                FontSize="20"
-                Width="150"
-                Height="40"
-                Content="Назад"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Margin="20" 
-                Click="ExitBt_Click"/>
+            </Border>
+        </Grid>
     </Grid>
 </Page>

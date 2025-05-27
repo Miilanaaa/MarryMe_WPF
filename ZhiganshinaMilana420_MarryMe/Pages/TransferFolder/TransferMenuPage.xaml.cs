@@ -1,25 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using ZhiganshinaMilana420_MarryMe.DB;
-using ZhiganshinaMilana420_MarryMe.Pages.MusicianFolder;
 
 namespace ZhiganshinaMilana420_MarryMe.Pages.TransferFolder
 {
-    /// <summary>
-    /// Логика взаимодействия для TransferMenuPage.xaml
-    /// </summary>
     public partial class TransferMenuPage : Page
     {
         public static List<TransferType> typees { get; set; }
@@ -32,89 +20,135 @@ namespace ZhiganshinaMilana420_MarryMe.Pages.TransferFolder
         private int currentPage = 1;
         private int itemsPerPage = 8;
         private int totalPages;
+
         public TransferMenuPage(Couple couple, CoupleFavorites coupleFavorites)
         {
             InitializeComponent();
             contextCouple = couple;
             coupleFavorites1 = coupleFavorites;
 
-            // Загружаем все рестораны
-            LoadAllRestaurants();
-
-            SearchTb.TextChanged += SearchTb_TextChanged;
-
-            typees = new List<TransferType>(DbConnection.MarryMe.TransferType.ToList());
-            typees.Insert(0, new TransferType() { Name = "Все" });
-            FilterCb.SelectedIndex = 0;
+            LoadAllTransfers();
+            InitializeFilters();
             this.DataContext = this;
         }
-        private void LoadAllRestaurants()
+
+        private void LoadAllTransfers()
         {
-            allTransfer = new List<Transfer>(DbConnection.MarryMe.Transfer.ToList());
+            allTransfer = DbConnection.MarryMe.Transfer.ToList();
             ApplyFiltersAndSort();
         }
-        private void SearchTb_TextChanged(object sender, TextChangedEventArgs e)
+
+        private void InitializeFilters()
         {
-            ApplyFiltersAndSort();
+            typees = DbConnection.MarryMe.TransferType.ToList();
+            typees.Insert(0, new TransferType() { Name = "Все" });
+            FilterCb.SelectedIndex = 0;
+
+            // Инициализация фильтра по количеству машин
+            CarCountFilterCb.ItemsSource = new List<string>
+            {
+                "Любое количество",
+                "1 машина", "2 машины", "3 машины", "4 машины", "5 машин",
+                "6 машин", "7 машин", "8 машин", "9 машин", "10 машин"
+            };
+            CarCountFilterCb.SelectedIndex = 0;
+
+            // Инициализация сортировки
+            SortCb.SelectedIndex = 0;
         }
+
         private void ApplyFiltersAndSort()
         {
-            // Применяем фильтр по поисковой строке
-            string searchText = SearchTb.Text?.ToLower() ?? string.Empty;
-            var type = FilterCb.SelectedItem as TransferType;
-
-            // Применяем фильтр по цене
-            decimal minPrice, maxPrice;
-            if (!decimal.TryParse(PriceFromTb.Text, out minPrice)) minPrice = 0;
-            if (!decimal.TryParse(PriceToTb.Text, out maxPrice)) maxPrice = decimal.MaxValue;
-
-            // Получаем выбранную дату
-            DateTime? selectedDate = DateBookingDp.SelectedDate;
-
-            filteredTransfer = allTransfer
-                .Where(r => r.Name.ToLower().Contains(searchText)) // Фильтр по названию
-                .Where(r => r.Price >= minPrice && r.Price <= maxPrice) // Фильтр по цене
-                .Where(r => selectedDate == null || !IsTransferBooked(r.Id, selectedDate.Value)) // Фильтр по дате
-                .ToList();
-
-            if (type != null && type.Name != "Все")
+            try
             {
-                filteredTransfer = filteredTransfer.Where(r => r.TransferTypeId == type.Id).ToList();
-            }
+                // Применяем фильтр по поисковой строке
+                string searchText = SearchTb.Text?.ToLower() ?? string.Empty;
+                filteredTransfer = allTransfer
+                    .Where(t => t.Name.ToLower().Contains(searchText))
+                    .ToList();
 
-            // Применяем сортировку
-            switch (SortCb.SelectedIndex)
+                // Фильтр по типу транспорта
+                if (FilterCb.SelectedItem is TransferType selectedType && selectedType.Name != "Все")
+                {
+                    filteredTransfer = filteredTransfer
+                        .Where(t => t.TransferTypeId == selectedType.Id)
+                        .ToList();
+                }
+
+                // Фильтр по цене
+                if (decimal.TryParse(PriceFromTb.Text, out decimal minPrice))
+                {
+                    filteredTransfer = filteredTransfer
+                        .Where(t => t.Price >= minPrice)
+                        .ToList();
+                }
+
+                if (decimal.TryParse(PriceToTb.Text, out decimal maxPrice))
+                {
+                    filteredTransfer = filteredTransfer
+                        .Where(t => t.Price <= maxPrice)
+                        .ToList();
+                }
+
+                // Фильтр по количеству машин
+                if (CarCountFilterCb.SelectedIndex > 0)
+                {
+                    int carsCount = CarCountFilterCb.SelectedIndex; // 1-10
+                    filteredTransfer = filteredTransfer
+                        .Where(t => t.NumberСars == carsCount)
+                        .ToList();
+                }
+
+                // Применяем сортировку
+                switch (SortCb.SelectedIndex)
+                {
+                    case 1: // По возрастанию цены
+                        filteredTransfer = filteredTransfer
+                            .OrderBy(t => t.Price)
+                            .ToList();
+                        break;
+                    case 2: // По убыванию цены
+                        filteredTransfer = filteredTransfer
+                            .OrderByDescending(t => t.Price)
+                            .ToList();
+                        break;
+                    default: // По умолчанию (без сортировки или по ID)
+                        filteredTransfer = filteredTransfer
+                            .OrderBy(t => t.Id)
+                            .ToList();
+                        break;
+                }
+
+                // Обновляем пагинацию
+                currentPage = 1;
+                InitializePagination();
+            }
+            catch (Exception ex)
             {
-                case 1: // По возрастанию
-                    filteredTransfer = filteredTransfer.OrderBy(r => r.Price).ToList();
-                    break;
-                case 2: // По убыванию
-                    filteredTransfer = filteredTransfer.OrderByDescending(r => r.Price).ToList();
-                    break;
+                MessageBox.Show($"Ошибка при применении фильтров: {ex.Message}");
             }
-
-            // Обновляем пагинацию
-            currentPage = 1;
-            InitializePagination();
         }
-        private bool IsTransferBooked(int photoId, DateTime date)
+
+        private bool IsTransferBooked(int transferId, DateTime date)
         {
             return DbConnection.MarryMe.TransferBookingDates
-                .Any(b => b.TransferId == photoId &&
-                         b.BookingDate == date.Date &&
-                         b.Status == true); // Только активные бронирования
+                .Any(b => b.TransferId == transferId &&
+                         b.BookingDate == date &&
+                         b.Status == true);
         }
+
         private void InitializePagination()
         {
-            // Вычисляем общее количество страниц
-            totalPages = (int)Math.Ceiling((double)filteredTransfer.Count / itemsPerPage);
-
-            // Очищаем панель пагинации
             PaginationPanel.Children.Clear();
             PaginationPanel.Children.Add(PrevPageBtn);
 
-            // Создаем кнопки для каждой страницы
-            for (int i = 1; i <= totalPages; i++)
+            totalPages = (int)Math.Ceiling((double)filteredTransfer.Count / itemsPerPage);
+
+            // Создаем кнопки страниц
+            int startPage = Math.Max(1, currentPage - 2);
+            int endPage = Math.Min(totalPages, currentPage + 2);
+
+            for (int i = startPage; i <= endPage; i++)
             {
                 var pageBtn = new Button
                 {
@@ -122,21 +156,21 @@ namespace ZhiganshinaMilana420_MarryMe.Pages.TransferFolder
                     Width = 40,
                     Height = 40,
                     FontSize = 15,
-                    Margin = new Thickness(5, 0, 5, 0),
+                    Margin = new Thickness(5),
                     Tag = i
                 };
                 pageBtn.Click += PageBtn_Click;
 
                 if (i == currentPage)
                 {
-                    pageBtn.Background = Brushes.LightGray;
+                    pageBtn.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#909478"));
+                    pageBtn.Foreground = Brushes.White;
                 }
 
                 PaginationPanel.Children.Add(pageBtn);
             }
 
             PaginationPanel.Children.Add(NextPageBtn);
-
             LoadPageData();
         }
 
@@ -148,24 +182,27 @@ namespace ZhiganshinaMilana420_MarryMe.Pages.TransferFolder
                 .ToList();
 
             TransferLV.ItemsSource = displayedTransfer;
-
             UpdatePaginationButtons();
         }
 
         private void UpdatePaginationButtons()
         {
+            PrevPageBtn.IsEnabled = currentPage > 1;
+            NextPageBtn.IsEnabled = currentPage < totalPages;
+
             foreach (var child in PaginationPanel.Children)
             {
                 if (child is Button btn && btn.Tag is int pageNumber)
                 {
-                    btn.Background = pageNumber == currentPage ? Brushes.LightGray : Brushes.Transparent;
+                    btn.Background = pageNumber == currentPage ?
+                        new SolidColorBrush((Color)ColorConverter.ConvertFromString("#909478")) :
+                        Brushes.Transparent;
+                    btn.Foreground = pageNumber == currentPage ?
+                        Brushes.White :
+                        Brushes.Black;
                 }
             }
-
-            PrevPageBtn.IsEnabled = currentPage > 1;
-            NextPageBtn.IsEnabled = currentPage < totalPages;
         }
-
 
         private void PageBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -193,11 +230,19 @@ namespace ZhiganshinaMilana420_MarryMe.Pages.TransferFolder
                 LoadPageData();
             }
         }
+
+        // Обработчики событий
+        private void SearchTb_TextChanged(object sender, TextChangedEventArgs e) => ApplyFiltersAndSort();
+        private void FilterCb_SelectionChanged(object sender, SelectionChangedEventArgs e) => ApplyFiltersAndSort();
+        private void CarCountFilterCb_SelectionChanged(object sender, SelectionChangedEventArgs e) => ApplyFiltersAndSort();
+        private void SortCb_SelectionChanged(object sender, SelectionChangedEventArgs e) => ApplyFiltersAndSort();
+        private void DateBookingDp_SelectedDateChanged(object sender, SelectionChangedEventArgs e) => ApplyFiltersAndSort();
+        private void ApplyPriceFilter_Click(object sender, RoutedEventArgs e) => ApplyFiltersAndSort();
+
         private void TransferLV_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (TransferLV.SelectedItem is Transfer transfer)
             {
-                transfer = TransferLV.SelectedItem as Transfer;
                 NavigationService.Navigate(new CardTransferPage(transfer, contextCouple, coupleFavorites1));
             }
         }
@@ -205,25 +250,6 @@ namespace ZhiganshinaMilana420_MarryMe.Pages.TransferFolder
         private void ExitBt_Click(object sender, RoutedEventArgs e)
         {
             NavigationService.Navigate(new СoupleСardPage(contextCouple));
-        }
-
-        private void ApplyPriceFilter_Click(object sender, RoutedEventArgs e)
-        {
-            ApplyFiltersAndSort();
-        }
-
-        private void SortCb_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ApplyFiltersAndSort();
-        }
-        private void DateBookingDp_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ApplyFiltersAndSort();
-        }
-
-        private void FilterCb_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ApplyFiltersAndSort();
         }
     }
 }

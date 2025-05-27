@@ -114,91 +114,105 @@
             </StackPanel>
 
             <!-- Список задач -->
-            <Border Style="{StaticResource CardBorder}" CornerRadius="15" Padding="10" Margin="0 70 0 0">
-                <ListView x:Name="TaskUserLV"
-                          d:ItemsSource="{d:SampleData ItemCount=1}"
-                          Height="560"
-                          AlternationCount="10000"
-                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center"/>
-                        </ItemsPanelTemplate>
-                    </ListView.ItemsPanel>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid Margin="0 5 0 5">
-                                <Border Style="{StaticResource TaskCardStyle}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <!-- Аватар и имя администратора -->
-                                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10">
-                                            <Ellipse Height="40" Width="40">
-                                                <Ellipse.Fill>
-                                                    <ImageBrush ImageSource="{Binding AdminPhoto}"
-                                                                Stretch="UniformToFill" 
-                                                                AlignmentX="Center" 
-                                                                AlignmentY="Center"/>
-                                                </Ellipse.Fill>
-                                            </Ellipse>
-                                            <StackPanel Orientation="Vertical" Margin="10 0 0 0" Width="100">
-                                                <TextBlock Text="{Binding AdminLastName}" FontWeight="Medium"/>
-                                                <TextBlock Text="{Binding AdminFirstName}"/>
+            <Border Style="{StaticResource CardBorder}" 
+                    CornerRadius="15" 
+                    Padding="10" 
+                    Margin="0 70 0 0">
+                <Grid>
+                    <Image x:Name="EmptyTaskImage"
+                           Source="/Images/TaskFrame.png"
+                           Stretch="Uniform"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Height="600"
+                           Visibility="Hidden"/>
+
+                    <ListView x:Name="TaskUserLV"
+                              d:ItemsSource="{d:SampleData ItemCount=1}"
+                              Height="560"
+                              AlternationCount="10000"
+                              ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                              Visibility="Visible">
+                        <ListView.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel Orientation="Vertical" HorizontalAlignment="Center"/>
+                            </ItemsPanelTemplate>
+                        </ListView.ItemsPanel>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0 5 0 5">
+                                    <Border Style="{StaticResource TaskCardStyle}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <!-- Аватар и имя администратора -->
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10">
+                                                <Ellipse Height="40" Width="40">
+                                                    <Ellipse.Fill>
+                                                        <ImageBrush ImageSource="{Binding AdminPhoto}"
+                                                                    Stretch="UniformToFill" 
+                                                                    AlignmentX="Center" 
+                                                                    AlignmentY="Center"/>
+                                                    </Ellipse.Fill>
+                                                </Ellipse>
+                                                <StackPanel Orientation="Vertical" Margin="10 0 0 0" Width="100">
+                                                    <TextBlock Text="{Binding AdminLastName}" FontWeight="Medium"/>
+                                                    <TextBlock Text="{Binding AdminFirstName}"/>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- Описание задачи -->
+                                            <TextBlock Text="{Binding Description}"
+                                                       FontSize="15"
+                                                       Width="750"
+                                                       Margin="10 0 0 0"
+                                                       TextWrapping="Wrap"
+                                                       VerticalAlignment="Center"/>
+
+                                            <!-- Статус и дата -->
+                                            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0 0 0">
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                                    <CheckBox IsChecked="{Binding Done, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  
+                                                              Style="{StaticResource MaterialDesignActionToggleButton}"
+                                                              VerticalAlignment="Center"
+                                                              BorderBrush="#909478"
+                                                              Background="#909478"
+                                                              Foreground="White"
+                                                              IsEnabled="False"/>
+                                                    <TextBlock x:Name="DateTaskUserTb"
+                                                               Text="{Binding DateEnd, StringFormat='{}{0:dd.MM.yyyy}'}"
+                                                               Margin="10 0 0 0"
+                                                               VerticalAlignment="Center"/>
+                                                </StackPanel>
+                                            </StackPanel>
+
+                                            <!-- Кнопки управления -->
+                                            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="20 0 0 0">
+                                                <Button x:Name="EditBt"
+                                                        Content="Редактировать"
+                                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                                        Width="150"
+                                                        Background="#909478"
+                                                        BorderBrush="#909478"
+                                                        Height="35"
+                                                        Margin="0 5 0 0"
+                                                        Click="EditBt_Click"/>
+                                                <Button x:Name="DelateBt"
+                                                        Content="Удалить"
+                                                        Style="{StaticResource MaterialDesignRaisedButton}"
+                                                        Width="150"
+                                                        Background="#efefef"
+                                                        BorderBrush="#909478"
+                                                        Foreground="#909478"
+                                                        Height="35"
+                                                        Margin="0 5 0 5"
+                                                        Click="DelateBt_Click"/>
                                             </StackPanel>
                                         </StackPanel>
-
-                                        <!-- Описание задачи -->
-                                        <TextBlock Text="{Binding Description}"
-                                                   FontSize="15"
-                                                   Width="550"
-                                                   Margin="10 0 0 0"
-                                                   TextWrapping="Wrap"
-                                                   VerticalAlignment="Center"/>
-
-                                        <!-- Статус и дата -->
-                                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10 0 0 0">
-                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                                <CheckBox IsChecked="{Binding Done, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  
-                                                          Style="{StaticResource MaterialDesignActionToggleButton}"
-                                                          VerticalAlignment="Center"
-                                                          BorderBrush="#909478"
-                                                          Background="#909478"
-                                                          Foreground="White"
-                                                          IsEnabled="False"/>
-                                                <TextBlock x:Name="DateTaskUserTb"
-                                                           Text="{Binding DateEnd, StringFormat='{}{0:dd.MM.yyyy}'}"
-                                                           Margin="10 0 0 0"
-                                                           VerticalAlignment="Center"/>
-                                            </StackPanel>
-                                        </StackPanel>
-
-                                        <!-- Кнопки управления -->
-                                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="20 0 0 0">
-                                            <Button x:Name="EditBt"
-                                                    Content="Редактировать"
-                                                    Style="{StaticResource MaterialDesignRaisedButton}"
-                                                    Width="150"
-                                                    Background="#909478"
-                                                    BorderBrush="#909478"
-                                                    Height="35"
-                                                    Margin="0 5 0 0"
-                                                    Click="EditBt_Click"/>
-                                            <Button x:Name="DelateBt"
-                                                    Content="Удалить"
-                                                    Style="{StaticResource MaterialDesignRaisedButton}"
-                                                    Width="150"
-                                                    Background="#efefef"
-                                                    BorderBrush="#909478"
-                                                    Foreground="#909478"
-                                                    Height="35"
-                                                    Margin="0 5 0 5"
-                                                    Click="DelateBt_Click"/>
-                                        </StackPanel>
-                                    </StackPanel>
-                                </Border>
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                                    </Border>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
             </Border>
         </Grid>
     </Grid>
