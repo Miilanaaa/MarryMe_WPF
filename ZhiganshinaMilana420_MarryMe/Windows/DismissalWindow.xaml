@@ -1,0 +1,143 @@
+﻿<Window x:Class="ZhiganshinaMilana420_MarryMe.Windows.DismissalWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="Увольнение сотрудника" 
+        Height="500" 
+        Width="600"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        AllowsTransparency="True"
+        Background="Transparent"
+        MouseDown="Window_MouseDown"
+        ResizeMode="NoResize">
+
+    <!-- Свадебный бордер с цветочным узором -->
+    <Border BorderThickness="3" CornerRadius="10" Background="White" Margin="10">
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#FFD3D3D3" Offset="0.0"/>
+                <GradientStop Color="#FFAEAEAE" Offset="0.5"/>
+                <GradientStop Color="#FFD3D3D3" Offset="1.0"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+
+        <!-- Внутренний бордер с цветочным узором -->
+        <Border BorderThickness="1" CornerRadius="8" Margin="2">
+            <Border.BorderBrush>
+                <VisualBrush TileMode="Tile" Viewport="0,0,50,50" ViewportUnits="Absolute">
+                    <VisualBrush.Visual>
+                        <Path Data="M12,0 L15,8 L23,8 L17,13 L20,20 L12,15 L5,20 L8,13 L2,8 L10,8 Z" 
+                              Fill="#909478" Stretch="Uniform"/>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.BorderBrush>
+
+            <!-- Основное содержимое -->
+            <Grid Margin="20">
+                <!-- Close Button -->
+                <Button x:Name="ClouseBtt"
+                        Width="25" 
+                        Height="25"
+                        Content="✕"
+                        FontSize="10"
+                        Background="#909478"
+                        Foreground="White"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Click="CancelButton_Click"
+                        BorderBrush="Transparent">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Grid>
+                                <Ellipse Fill="{TemplateBinding Background}" 
+                                         Stroke="{TemplateBinding BorderBrush}"
+                                         StrokeThickness="{TemplateBinding BorderThickness}"/>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <StackPanel>
+                    <!-- Заголовок с декоративными элементами -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 15">
+                        <Path Data="M0,5 L10,5 L5,0 Z" Fill="#909478" Stretch="Uniform" Width="20" Margin="0 0 10 0"/>
+                        <TextBlock Text="Вы точно хотите уволить сотрудника?" 
+                                   FontSize="18" 
+                                   FontWeight="Bold"
+                                   Foreground="#909478"/>
+                        <Path Data="M0,0 L5,5 L10,0 Z" Fill="#909478" Stretch="Uniform" Width="20" Margin="10 0 0 0"/>
+                    </StackPanel>
+
+                    <!-- Имя сотрудника -->
+                    <Border CornerRadius="15" Background="#F5F5F5" Padding="10" Margin="0 0 0 20" >
+                        <TextBlock Text="{Binding EmployeeFullName}" 
+                                   FontSize="16"
+                                   Foreground="#909478"
+                                   HorizontalAlignment="Center"
+                                   FontWeight="SemiBold"/>
+                    </Border>
+
+                    <!-- Статья ТК РФ -->
+                    <TextBlock Text="Статья ТК РФ:" 
+                               FontSize="16"
+                               Margin="0 0 0 5"
+                               Foreground="#909478"/>
+                    <ComboBox x:Name="ArticleCb" 
+                              Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                              FontSize="16" 
+                              Margin="0 0 0 15"
+                              BorderBrush="#909478"
+                              SelectedIndex="0">
+                        <ComboBoxItem>п. 3 ч. 1 ст. 77 ТК РФ - по собственному желанию</ComboBoxItem>
+                        <ComboBoxItem>п. 5 ч. 1 ст. 81 ТК РФ - неоднократное неисполнение трудовых обязанностей</ComboBoxItem>
+                        <ComboBoxItem>п. 6 ч. 1 ст. 81 ТК РФ - прогул</ComboBoxItem>
+                        <ComboBoxItem>п. 10 ч. 1 ст. 81 ТК РФ - разглашение охраняемой законом тайны</ComboBoxItem>
+                    </ComboBox>
+
+                    <!-- Причина увольнения -->
+                    <TextBlock Text="Причина увольнения:" 
+                               FontSize="16"
+                               Margin="0 0 0 5"
+                               Foreground="#909478"/>
+                    <TextBox x:Name="ReasonTb" 
+                             Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                             FontSize="16" 
+                             Margin="0 0 0 20" 
+                             Height="80" 
+                             BorderBrush="#909478"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             VerticalScrollBarVisibility="Auto"/>
+
+                    <!-- Кнопки действий -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                        <Button Content="Отмена" 
+                                Style="{StaticResource MaterialDesignOutlinedButton}"
+                                Width="120" 
+                                Height="35" 
+                                Margin="0 0 15 0"
+                                Foreground="#909478"
+                                BorderBrush="#909478"
+                                Click="CancelButton_Click"/>
+                        <Button Content="Уволить" 
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                Width="120" 
+                                Height="35"
+                                Background="#909478"
+                                Foreground="White"
+                                Click="DismissButton_Click">
+                            <Button.Effect>
+                                <DropShadowEffect Color="#909478" BlurRadius="10" ShadowDepth="3"/>
+                            </Button.Effect>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Border>
+</Window>

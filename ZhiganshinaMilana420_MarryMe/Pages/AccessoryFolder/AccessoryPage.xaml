@@ -1,0 +1,175 @@
+﻿<Page x:Class="ZhiganshinaMilana420_MarryMe.Pages.AccessoryFolder.AccessoryPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:local="clr-namespace:ZhiganshinaMilana420_MarryMe.Pages.AccessoryFolder"
+      mc:Ignorable="d" 
+      d:DesignHeight="750" d:DesignWidth="1445"
+      Title="Управление украшениями"
+      FontFamily="Segoe UI Light">
+
+    <Grid Background="#FFF9FB">
+        <!-- Фон с градиентом и легким узором -->
+        <Rectangle Fill="#FFF9FB"/>
+        <Path Data="M0,0 L1445,0 1445,750 Q722,850 0,750 Z" 
+               Fill="#909478" Opacity="0.05" Stretch="Fill"/>
+
+        <!-- Шапка с элементами управления -->
+        <Border Background="White" CornerRadius="0 0 20 20" 
+                Height="100" VerticalAlignment="Top"
+                Effect="{StaticResource MaterialDesignShadowDepth1}">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <!-- Поиск -->
+                <TextBox x:Name="SearchTb"
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                         Width="250"
+                         Height="50"
+                         materialDesign:HintAssist.Hint="Поиск украшений..."
+                         FontSize="14"
+                         Margin="10"
+                         TextChanged="SearchTb_TextChanged"/>
+
+                <!-- Фильтр по типу -->
+                <ComboBox x:Name="FilterCb"
+                          Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                          Width="250"
+                          Height="50"
+                          FontSize="14"
+                          Margin="10"
+                          materialDesign:HintAssist.Hint="Тип украшений"
+                          ItemsSource="{Binding typees}"
+                          DisplayMemberPath="Name"
+                          SelectionChanged="FilterCb_SelectionChanged">
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+                </ComboBox>
+
+                <!-- Кнопка добавления -->
+                <Button x:Name="AddButton"
+                        Content="+ Добавить украшение"
+                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                        Width="200"
+                        Height="50"
+                        FontSize="16"
+                        Margin="10"
+                        Click="Button_Click"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Основной контент - список украшений -->
+        <ListView x:Name="AccessoryLV"
+                  Margin="20 120 20 70"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal" 
+                               HorizontalAlignment="Center"
+                               Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"/>
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border Width="400"
+                            Height="220"
+                            BorderThickness="3"
+                            BorderBrush="#909478"
+                            CornerRadius="20"
+                            Margin="10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Изображение украшения -->
+                            <Image Grid.Column="0"
+                                   Source="{Binding DisplayPhotoImage}"
+                                   Width="150"
+                                   Height="150"
+                                   Margin="20"
+                                   VerticalAlignment="Center"/>
+
+                            <!-- Информация об украшении -->
+                            <StackPanel Grid.Column="1" Margin="0 10 10 10">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="№" FontSize="18"/>
+                                    <TextBlock Text="{Binding Id}" FontSize="18" Margin="5 0 0 0"/>
+                                </StackPanel>
+
+                                <TextBlock Text="{Binding Name}"
+                                           FontSize="18"
+                                           FontWeight="SemiBold"
+                                           TextWrapping="Wrap"
+                                           Margin="0 5 0 0"/>
+
+                                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                    <TextBlock Text="{Binding Price}" FontSize="18"/>
+                                    <TextBlock Text=" руб." FontSize="18" Margin="5 0 0 0"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 10 0 0">
+                                    <Button Content="✏️"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            Width="40"
+                                            Height="40"
+                                            Margin="0 0 10 0"
+                                            Click="ExitBtn_Click"
+                                            ToolTip="Редактировать"/>
+
+                                    <Button Content="🗑"
+                                            Style="{StaticResource MaterialDesignIconButton}"
+                                            Width="40"
+                                            Height="40"
+                                            Click="DeleteBtn_Click"
+                                            ToolTip="Удалить"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+        <!-- Пагинация -->
+        <StackPanel x:Name="PaginationPanel"
+            Orientation="Horizontal" 
+            HorizontalAlignment="Center" 
+            VerticalAlignment="Bottom"
+            Margin="0 0 0 10">
+            <Button x:Name="PrevPageBtn" 
+            Content="◄" 
+            Width="50" 
+            Height="40" 
+            FontSize="15"
+            Margin="5 0"
+            Click="PrevPageBtn_Click"/>
+
+            <!-- Кнопки страниц будут добавляться динамически -->
+
+            <Button x:Name="NextPageBtn" 
+            Content="►" 
+            Width="50" 
+            Height="40" 
+            FontSize="15"
+            Margin="5 0"
+            Click="NextPageBtn_Click"/>
+        </StackPanel>
+        <!-- Кнопка назад -->
+        <Button x:Name="ExitBt"
+                Style="{StaticResource MaterialDesignFloatingActionMiniButton}"
+                Background="#909478"
+                BorderBrush="#909478"
+                Content="{materialDesign:PackIcon Kind=ArrowLeft}"
+                Width="40"
+                Height="40"
+                HorizontalAlignment="Left" 
+                VerticalAlignment="Top"
+                Margin="20" 
+                Click="ExitBt_Click"
+                ToolTip="Назад"/>
+    </Grid>
+</Page>

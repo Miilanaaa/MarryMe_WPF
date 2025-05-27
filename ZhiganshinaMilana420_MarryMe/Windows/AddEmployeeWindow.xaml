@@ -1,0 +1,281 @@
+﻿<Window x:Class="ZhiganshinaMilana420_MarryMe.Windows.AddEmployeeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        Title="Добавление сотрудника" 
+        Height="550" 
+        Width="800"
+        AllowsTransparency="True"
+        Background="Transparent"
+        MouseDown="Window_MouseDown"
+        >
+
+    <!-- Свадебный бордер с цветочным узором -->
+    <Border BorderThickness="3" CornerRadius="10" Background="White" Margin="10">
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#FFD3D3D3" Offset="0.0"/>
+                <GradientStop Color="#FFAEAEAE" Offset="0.5"/>
+                <GradientStop Color="#FFD3D3D3" Offset="1.0"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+
+        <!-- Внутренний бордер с цветочным узором -->
+        <Border BorderThickness="1" CornerRadius="8" Margin="2">
+            <Border.BorderBrush>
+                <VisualBrush TileMode="Tile" Viewport="0,0,50,50" ViewportUnits="Absolute">
+                    <VisualBrush.Visual>
+                        <Path Data="M12,0 L15,8 L23,8 L17,13 L20,20 L12,15 L5,20 L8,13 L2,8 L10,8 Z" 
+                              Fill="#909478" Stretch="Uniform"/>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.BorderBrush>
+
+            <!-- Основное содержимое -->
+            <Grid Margin="20" Background="White">
+                <!-- Close Button -->
+                <Button x:Name="ClouseBtt"
+                        Width="25" 
+                        Height="25"
+                        Content="✕"
+                        FontSize="10"
+                        Background="#909478"
+                        Foreground="White"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Click="ClouseBtt_Click"
+                        BorderBrush="Transparent">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Grid>
+                                <Ellipse Fill="{TemplateBinding Background}" 
+                                         Stroke="{TemplateBinding BorderBrush}"
+                                         StrokeThickness="{TemplateBinding BorderThickness}"/>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <!-- Main Content -->
+                <StackPanel Orientation="Vertical"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="700">
+
+                    <!-- Title with floral decoration -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 20">
+                        <Path Data="M0,5 L10,5 L5,0 Z" Fill="#909478" Stretch="Uniform" Width="20" Margin="0 0 10 0"/>
+                        <TextBlock Text="Добавление сотрудника"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="#909478"/>
+                        <Path Data="M0,0 L5,5 L10,0 Z" Fill="#909478" Stretch="Uniform" Width="20" Margin="10 0 0 0"/>
+                    </StackPanel>
+
+                    <!-- Personal Info -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Last Name -->
+                        <StackPanel Orientation="Vertical" Grid.Column="0">
+                            <TextBlock Text="Фамилия"
+                                       FontSize="16"
+                                       Margin="0 0 0 5"/>
+                            <TextBox x:Name="SurnameTb"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Height="50"
+                                     Margin="0 0 10 15"
+                                     BorderBrush="#909478"/>
+                        </StackPanel>
+
+                        <!-- First Name -->
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <TextBlock Text="Имя"
+                                       FontSize="16"
+                                       Margin="0 0 0 5"/>
+                            <TextBox x:Name="NameTb"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Height="50"
+                                     Margin="0 0 10 15"
+                                     BorderBrush="#909478"/>
+                        </StackPanel>
+
+                        <!-- Middle Name -->
+                        <StackPanel Orientation="Vertical" Grid.Column="2">
+                            <TextBlock Text="Отчество"
+                                       FontSize="16"
+                                       Margin="0 0 0 5"/>
+                            <TextBox x:Name="PatronymicTb"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Height="50"
+                                     Margin="0 0 0 15"
+                                     BorderBrush="#909478"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Work Info -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Role -->
+                        <StackPanel Orientation="Vertical" Grid.Column="0">
+                            <TextBlock Text="Роль"
+                                       FontSize="16"
+                                       Margin="0 0 0 5"/>
+                            <ComboBox x:Name="RoleCb"
+                                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                      Height="50"
+                                      Margin="0 0 10 15"
+                                      BorderBrush="#909478"
+                                      ItemsSource="{Binding roles}">
+                                <ComboBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name}"/>
+                                    </DataTemplate>
+                                </ComboBox.ItemTemplate>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- Email -->
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <TextBlock Text="Email"
+                                       FontSize="16"
+                                       Margin="0 0 0 5"/>
+                            <TextBox x:Name="EmailTb"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Height="50"
+                                     Margin="0 0 10 15"
+                                     BorderBrush="#909478"/>
+                        </StackPanel>
+
+                        <!-- Salary -->
+                        <StackPanel Orientation="Vertical" Grid.Column="2">
+                            <TextBlock Text="Оклад"
+                                       FontSize="16"
+                                       Margin="0 0 0 5"/>
+                            <TextBox x:Name="SalaryTb"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Height="50"
+                                     Margin="0 0 0 15"
+                                     BorderBrush="#909478"/>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Additional Info -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Birth Date -->
+                        <StackPanel Orientation="Vertical" Grid.Column="0">
+                            <TextBlock Text="Дата рождения"
+                                       FontSize="16"
+                                       Margin="0 0 0 5"/>
+                            <DatePicker x:Name="BirthDateDp"
+                                        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                        Height="50"
+                                        Margin="0 0 10 15"
+                                        BorderBrush="#909478"/>
+                        </StackPanel>
+
+                        <!-- Gender -->
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <TextBlock Text="Пол"
+                                       FontSize="16"
+                                       Margin="0 0 0 5"/>
+                            <StackPanel Orientation="Horizontal" Margin="0 5 0 15">
+                                <RadioButton x:Name="GenderMen"
+                                             Content="Мужской"
+                                             GroupName="Gender"
+                                             Style="{StaticResource MaterialDesignRadioButton}"
+                                             Foreground="#909478"
+                                             Margin="0 0 20 0"/>
+                                <RadioButton x:Name="GenderGirl"
+                                             Content="Женский"
+                                             GroupName="Gender"
+                                             Style="{StaticResource MaterialDesignRadioButton}"
+                                             Foreground="#909478"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+
+                    <!-- Auth Info -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Login -->
+                        <StackPanel Orientation="Vertical" Grid.Column="0">
+                            <TextBlock Text="Логин"
+                                       FontSize="16"
+                                       Margin="0 0 0 5"/>
+                            <TextBox x:Name="LoginTb"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Height="50"
+                                     Margin="0 0 10 0"
+                                     BorderBrush="#909478"/>
+                        </StackPanel>
+
+                        <!-- Password -->
+                        <StackPanel Orientation="Vertical" Grid.Column="1">
+                            <TextBlock Text="Пароль"
+                                       FontSize="16"
+                                       Margin="0 0 0 5"/>
+                            <Grid>
+                                <PasswordBox x:Name="PasswordTb"
+                                             Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
+                                             Height="50"
+                                             Margin="0 0 10 0"
+                                             BorderBrush="#909478"/>
+                                <Button x:Name="TogglePasswordButton" 
+                                        Width="40" 
+                                        Height="40"
+                                        Content="👁"
+                                        HorizontalAlignment="Right"
+                                        Style="{StaticResource MaterialDesignIconButton}"
+                                        Foreground="#909478"
+                                        Click="TogglePasswordButton_Click"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <!-- Add Button -->
+                        <Button x:Name="AddEmployyeBt"
+                                Grid.Column="2"
+                                Width="180"
+                                Height="45"
+                                FontSize="16"
+                                Margin="20 25 0 0"
+                                Content="Создать приказ" 
+                                Style="{StaticResource MaterialDesignRaisedButton}"
+                                Background="#909478"
+                                Foreground="White"
+                                Click="AddEmployyeBt_Click">
+                            <Button.Effect>
+                                <DropShadowEffect Color="#909478" BlurRadius="10" ShadowDepth="3"/>
+                            </Button.Effect>
+                        </Button>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Border>
+</Window>

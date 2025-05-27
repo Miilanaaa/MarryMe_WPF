@@ -1,0 +1,170 @@
+﻿<Page x:Class="ZhiganshinaMilana420_MarryMe.Pages.TaskUserAddPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ZhiganshinaMilana420_MarryMe.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      mc:Ignorable="d"
+      d:DesignHeight="750" d:DesignWidth="1445"
+      Title="TaskUserAddPage">
+
+    <Grid Background="#EEEFEA">
+        <!-- Header Section -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Search and Filter Controls -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="20">
+            <TextBox x:Name="SearchTb"
+                     Width="350"
+                     Height="50"
+                     FontSize="13"
+                     VerticalAlignment="Center"
+                     TextChanged="SearchTb_TextChanged"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     materialDesign:HintAssist.Hint="Поиск сотрудников"/>
+
+            <StackPanel Orientation="Horizontal" Margin="20 0 0 0" VerticalAlignment="Center">
+                <CheckBox x:Name="ShowTakenCheckBox"
+                          Style="{StaticResource MaterialDesignActionToggleButton}"
+                          Margin="0 0 10 0" 
+                          Background="#909478"
+                          Foreground="White"
+                          Checked="ShowTakenCheckBox_Checked"
+                          Unchecked="ShowTakenCheckBox_Unchecked"/>
+                <TextBlock Text="Работающие"
+                           FontSize="18"
+                           VerticalAlignment="Center"/>
+
+                <CheckBox x:Name="ShowFreeCheckBox"
+                          Style="{StaticResource MaterialDesignActionToggleButton}"
+                          Margin="20 0 10 0"
+                          Checked="ShowFreeCheckBox_Checked"
+                          Background="#909478"
+                          Foreground="White"
+                          Unchecked="ShowFreeCheckBox_Unchecked"
+                          />
+                <TextBlock Text="Уволенные"
+                           FontSize="18"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <Button x:Name="AddEmployyeBt"
+                    Width="250"
+                    Content="Добавить сотрудника"
+                    Height="40"
+                    FontSize="17"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Margin="20 0 0 0" 
+                    Click="AddEmployyeBt_Click"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Background="#909478"
+                    Foreground="White"/>
+        </StackPanel>
+
+
+        <!-- Main Content - List of Employees -->
+        <ListView x:Name="UsersLV"
+                  Grid.Row="1"
+                  Margin="20"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Margin" Value="0 5 0 5"/>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <ContentPresenter/>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="#909478"
+                            BorderThickness="2"
+                            CornerRadius="10"
+                            Padding="10"
+                            Background="White">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Employee Photo -->
+                            <Ellipse Width="100"
+                                     Height="100"
+                                     Grid.Column="0"
+                                     VerticalAlignment="Center">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="{Binding Photo}"
+                                                Stretch="UniformToFill"/>
+                                </Ellipse.Fill>
+                            </Ellipse>
+
+                            <!-- Employee Info -->
+                            <StackPanel Grid.Column="1" Margin="20 0 0 0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="ID:"
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Id}"
+                                               Margin="5 0 20 0"/>
+                                    <TextBlock Text="Должность:"
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Role.Name}"
+                                               Margin="5 0 0 0"/>
+                                </StackPanel>
+
+                                <TextBlock Text="{Binding FullName}"
+                                           FontSize="18"
+                                           Margin="0 5 0 0"/>
+
+                                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                    <TextBlock Text="Дата рождения:"
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding BirthDate, StringFormat='{}{0:dd.MM.yyyy}'}"
+                                               Margin="5 0 0 0"/>
+                                </StackPanel>
+
+                                <StackPanel Orientation="Horizontal" Margin="0 5 0 0">
+                                    <TextBlock Text="Email:"
+                                               FontWeight="Bold"/>
+                                    <TextBlock Text="{Binding Email}"
+                                               Margin="5 0 0 0"/>
+                                </StackPanel>
+                            </StackPanel>
+
+
+                            <!-- Action Buttons -->
+                            <StackPanel Grid.Column="2"
+                                        VerticalAlignment="Center"
+                                        Width="150">
+                                <Button Content="+ задачи"
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        Margin="0 0 0 10"
+                                        Click="TaskUserBt_Click"
+                                        IsEnabled="{Binding IsUsersDismissed}"/>
+
+                                <Button Content="Уволить"
+                                        Style="{StaticResource MaterialDesignOutlinedButton}"
+                                        Click="Delate_Click"
+                                        IsEnabled="{Binding IsUsersDismissed}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Page>

@@ -1,0 +1,94 @@
+﻿<Window x:Class="ZhiganshinaMilana420_MarryMe.Windows.EditTaskUsersWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        MouseDown="Window_MouseDown"
+        Title="Редактирование задачи" 
+        Height="550" 
+        Width="630"
+        AllowsTransparency="True"
+        Background="Transparent">
+
+    <Border BorderThickness="3" CornerRadius="10" Background="White" Margin="10">
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#FFD3D3D3" Offset="0.0"/>
+                <GradientStop Color="#FFAEAEAE" Offset="0.5"/>
+                <GradientStop Color="#FFD3D3D3" Offset="1.0"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+
+        <Border BorderThickness="1" CornerRadius="8" Margin="2">
+            <Border.BorderBrush>
+                <VisualBrush TileMode="Tile" Viewport="0,0,50,50" ViewportUnits="Absolute">
+                    <VisualBrush.Visual>
+                        <Path Data="M12,0 L15,8 L23,8 L17,13 L20,20 L12,15 L5,20 L8,13 L2,8 L10,8 Z" 
+                              Fill="#909478" Stretch="Uniform"/>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.BorderBrush>
+
+            <Grid Margin="20" Background="White">
+                <Button x:Name="ClouseBtt"
+                        Width="25" 
+                        Height="25"
+                        Content="✕"
+                        FontSize="10"
+                        Background="#909478"
+                        Foreground="White"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Click="ClouseBtt_Click"
+                        BorderBrush="Transparent">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Grid>
+                                <Ellipse Fill="{TemplateBinding Background}" 
+                                         Stroke="{TemplateBinding BorderBrush}"
+                                         StrokeThickness="{TemplateBinding BorderThickness}"/>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <StackPanel Orientation="Vertical" Margin="0 20 0 0">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 10">
+                        <Path Data="M0,5 L10,5 L5,0 Z" Fill="#909478" Stretch="Uniform" Width="20" Margin="0 0 10 0"/>
+                        <TextBlock Text="Редактирование задачи"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="#909478"/>
+                        <Path Data="M0,0 L5,5 L10,0 Z" Fill="#909478" Stretch="Uniform" Width="20" Margin="10 0 0 0"/>
+                    </StackPanel>
+
+                    <TextBlock x:Name="NameEmployeeTb" FontSize="16" Foreground="#909478"
+                               HorizontalAlignment="Center" Margin="0 0 0 20"/>
+
+                    <StackPanel Orientation="Vertical" Margin="0 10 0 0">
+                        <TextBlock Text="Описание задачи" FontSize="16" Margin="0 0 0 5"/>
+                        <TextBox x:Name="DescriptionTb" Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 Height="150" FontSize="12" TextWrapping="Wrap" AcceptsReturn="True"
+                                 VerticalScrollBarVisibility="Auto" BorderBrush="#909478"/>
+
+                        <TextBlock Text="Срок реализации задачи" FontSize="16" Margin="0 15 0 5"/>
+                        <DatePicker x:Name="DateEndDp" Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                    Height="auto" FontSize="12" DisplayDateStart="{x:Static sys:DateTime.Today}"
+                                    CalendarOpened="DateEndDp_CalendarOpened" BorderBrush="#909478"/>
+                    </StackPanel>
+
+                    <Button x:Name="AddTaksUserBt" Content="Сохранить" Width="150" Height="45" FontSize="14"
+                            Style="{StaticResource MaterialDesignRaisedButton}" Background="#909478"
+                            Foreground="White" HorizontalAlignment="Right" Margin="0 20 0 0"
+                            Click="AddTaksUserBt_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Border>
+</Window>

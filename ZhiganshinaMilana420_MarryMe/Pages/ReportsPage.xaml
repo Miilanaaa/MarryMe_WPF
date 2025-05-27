@@ -1,0 +1,613 @@
+﻿<Page x:Class="ZhiganshinaMilana420_MarryMe.Pages.ReportsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:ZhiganshinaMilana420_MarryMe.Pages"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+      mc:Ignorable="d" 
+      d:DesignHeight="750" d:DesignWidth="1445"
+      Title="ReportsPage">
+
+    <Page.Resources>
+        <!-- Стили для карточек -->
+        <Style TargetType="Border" x:Key="CardBorder">
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="2" Opacity="0.1"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Стили для кнопок -->
+        <Style TargetType="Button" x:Key="PrimaryButton">
+            <Setter Property="Background" Value="#909478"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="12 8"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.2"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#7a8064"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style TargetType="Button" x:Key="SecondaryButton" BasedOn="{StaticResource PrimaryButton}">
+            <Setter Property="Background" Value="#EFEFEF"/>
+            <Setter Property="Foreground" Value="#909478"/>
+            <Setter Property="BorderBrush" Value="#909478"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+    </Page.Resources>
+
+    <Grid Background="#EEEFEA">
+        <TabControl>
+            <!-- Вкладка 1: Бронирования -->
+            <TabItem Header="Бронирования" 
+                     Margin="0 0 20 0"
+                     IsSelected="True"
+                     Style="{StaticResource MaterialDesignTabItem}">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Панель управления -->
+                    <Border Style="{StaticResource CardBorder}" 
+                            CornerRadius="15"
+                            Padding="10"
+                            Margin="0 0 0 10">
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center">
+                            <ComboBox x:Name="SortCb"
+                                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                      Width="250"
+                                      Height="45"
+                                      Margin="0 0 10 0"
+                                      SelectionChanged="FilterBookings">
+                                <ComboBoxItem Content="Рестораны"/>
+                                <ComboBoxItem Content="Трансфер"/>
+                                <ComboBoxItem Content="Ведущие"/>
+                                <ComboBoxItem Content="Стилисты"/>
+                                <ComboBoxItem Content="Музыканты"/>
+                                <ComboBoxItem Content="Фото и видео"/>
+                            </ComboBox>
+
+                            <DatePicker Name="DateBooking"
+                                        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                        Width="250"
+                                        Language="ru-Ru"
+                                        Height="48"
+                                        Margin="0 0 10 0"
+                                        SelectedDateChanged="FilterBookings"/>
+
+                            <Button Content="Экспорт в Word" 
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Background="#909478"
+                                    BorderBrush="#909478"
+                                    Width="150" 
+                                    Height="40" 
+                                    Click="ExportToWord_Click"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Список бронирований -->
+                    <Border Grid.Row="1"
+                            Style="{StaticResource CardBorder}" 
+                            CornerRadius="15"
+                            Padding="10">
+                        <ListView x:Name="BookingsListView">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Наименование" Width="200">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name}" 
+                                                           TextWrapping="Wrap"
+                                                           Width="200"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Номер" Width="110">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Id}" 
+                                                           TextWrapping="Wrap"
+                                                           Width="110"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Описание" Width="300">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Description}" 
+                                                           TextWrapping="Wrap"
+                                                           Width="300"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Пара" Width="450">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding CoupleName}" 
+                                                           TextWrapping="Wrap"
+                                                           Width="450"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Дата бронирования" Width="200">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding BookingDate, StringFormat={}{0:dd.MM.yyyy}}" 
+                                                           TextWrapping="Wrap"
+                                                           Width="200"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Top"/>
+                                    <Setter Property="Padding" Value="5"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- Вкладка 2: Активность коллекций -->
+            <TabItem Header="Активность колекций" 
+                     Style="{StaticResource MaterialDesignTabItem}">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Панель управления -->
+                    <Border Style="{StaticResource CardBorder}" 
+                            CornerRadius="15"
+                            Padding="10"
+                            Margin="0 0 0 10">
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center">
+                            <ComboBox x:Name="AktivCb"
+                                      Style="{StaticResource MaterialDesignOutlinedComboBox}"
+                                      Width="250"
+                                      Height="45"
+                                      Margin="0 0 10 0"
+                                      SelectionChanged="AktivCb_SelectionChanged">
+                                <ComboBoxItem Content="Рестораны"/>
+                                <ComboBoxItem Content="Декорации"/>
+                                <ComboBoxItem Content="Трансфер"/>
+                                <ComboBoxItem Content="Ведущие"/>
+                                <ComboBoxItem Content="Платье"/>
+                                <ComboBoxItem Content="Костюм"/>
+                                <ComboBoxItem Content="Украшения"/>
+                                <ComboBoxItem Content="Стилисты"/>
+                                <ComboBoxItem Content="Торт"/>
+                                <ComboBoxItem Content="Букет"/>
+                                <ComboBoxItem Content="Музыканты"/>
+                                <ComboBoxItem Content="Фото и видео"/>
+                            </ComboBox>
+
+                            <TextBox x:Name="ActivityYearTextBox"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Width="150"
+                                     Height="48"
+                                     Margin="0 0 10 0"
+                                     Text="{Binding ActivityYear, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Год"
+                                     materialDesign:HintAssist.HintOpacity="0.87"
+                                     FontSize="11"/>
+
+                            <Button Content="Применить"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Width="110"
+                                    Height="40"
+                                    Background="#909478"
+                                    BorderBrush="#909478"
+                                    Margin="0 0 10 0"
+                                    Click="ApplyActivityYearFilter_Click"/>
+
+                            <Button Content="Экспорт в Word" 
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Width="150" 
+                                    Height="40" 
+                                    Background="#909478"
+                                    BorderBrush="#909478"
+                                    Click="ExportActivityToWord_Click"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Таблица активности -->
+                    <Border Grid.Row="1"
+                            Style="{StaticResource CardBorder}" 
+                            CornerRadius="15"
+                            Padding="10">
+                        <ListView x:Name="ActivityListView">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Название" Width="130">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Name}" 
+                                                           TextWrapping="Wrap"
+                                                           Width="200"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Январь" Width="108">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding January}" 
+                                                           TextAlignment="Center"
+                                                           Width="80"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Февраль" Width="117">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding February}" 
+                                                           TextAlignment="Center"
+                                                           Width="80"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Март" Width="100">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding March}" 
+                                                           TextAlignment="Center"
+                                                           Width="80"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Апрель" Width="109">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding April}" 
+                                                           TextAlignment="Center"
+                                                           Width="80"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Май" Width="90">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding May}" 
+                                                           TextAlignment="Center"
+                                                           Width="80"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Июнь" Width="100">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding June}" 
+                                                           TextAlignment="Center"
+                                                           Width="80"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Июль" Width="100">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding July}" 
+                                                           TextAlignment="Center"
+                                                           Width="80"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Август" Width="104">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding August}" 
+                                                           TextAlignment="Center"
+                                                           Width="80"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Сентябрь" Width="121">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding September}" 
+                                                           TextAlignment="Center"
+                                                           Width="80"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Октябрь" Width="119">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding October}" 
+                                                           TextAlignment="Center"
+                                                           Width="80"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Ноябрь" Width="111">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding November}" 
+                                                           TextAlignment="Center"
+                                                           Width="80"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Декабрь" Width="116">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding December}" 
+                                                           TextAlignment="Center"
+                                                           Width="80"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Итого" Width="120">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Total}" 
+                                                           TextAlignment="Center"
+                                                           Width="80"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="VerticalContentAlignment" Value="Top"/>
+                                    <Setter Property="Padding" Value="5"/>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                        </ListView>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <!-- Вкладка 3: Активность клиентов -->
+            <TabItem Header="Активность клиентов" 
+                     Style="{StaticResource MaterialDesignTabItem}">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Панель управления -->
+                    <Border Style="{StaticResource CardBorder}" 
+                            CornerRadius="15"
+                            Padding="10"
+                            Margin="0 0 0 10">
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center">
+                            <TextBox x:Name="YearTextBox"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                     Width="150"
+                                     Height="48"
+                                     FontSize="12"
+                                     Margin="0 0 10 0"
+                                     Text="{Binding CurrentYear, UpdateSourceTrigger=PropertyChanged}"
+                                     materialDesign:HintAssist.Hint="Год"
+                                     materialDesign:HintAssist.HintOpacity="0.87"/>
+
+                            <Button Content="Применить"
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Width="110"
+                                    Height="40"
+                                    Background="#909478"
+                                    BorderBrush="#909478"
+                                    Margin="0 0 10 0"
+                                    Click="ApplyYearFilter_Click"/>
+
+                            <Button Content="Экспорт в Word" 
+                                    Style="{StaticResource MaterialDesignRaisedButton}"
+                                    Width="150" 
+                                    Height="40" 
+                                    Background="#909478"
+                                    BorderBrush="#909478"
+                                    Click="ExportClientActivityToWord_Click"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Графики и таблица -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- График активности -->
+                        <Border Grid.Column="0"
+                                Style="{StaticResource CardBorder}" 
+                                CornerRadius="15"
+                                Padding="10"
+                                Margin="0 0 5 0">
+                            <lvc:CartesianChart Series="{Binding SeriesCollection}" 
+                                               LegendLocation="Bottom">
+                                <lvc:CartesianChart.AxisX>
+                                    <lvc:Axis Title="Месяцы" 
+                                              Labels="{Binding Labels}"/>
+                                </lvc:CartesianChart.AxisX>
+                                <lvc:CartesianChart.AxisY>
+                                    <lvc:Axis Title="Количество" LabelFormatter="{Binding Formatter}"/>
+                                </lvc:CartesianChart.AxisY>
+                            </lvc:CartesianChart>
+                        </Border>
+
+                        <!-- Таблица активности -->
+                        <Border Grid.Column="1"
+                                Style="{StaticResource CardBorder}" 
+                                CornerRadius="15"
+                                Padding="10"
+                                Margin="5 0 0 0">
+                            <ListView x:Name="ClientActivityListView">
+                                <ListView.View>
+                                    <GridView>
+                                        <GridViewColumn Header="Показатель" Width="200">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Name}" 
+                                                               TextWrapping="Wrap"
+                                                               Width="200"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Январь" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding January}" 
+                                                               TextAlignment="Center"
+                                                               Width="100"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Февраль" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding February}" 
+                                                               TextAlignment="Center"
+                                                               Width="100"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Март" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding March}" 
+                                                               TextAlignment="Center"
+                                                               Width="100"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Апрель" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding April}" 
+                                                               TextAlignment="Center"
+                                                               Width="100"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Май" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding May}" 
+                                                               TextAlignment="Center"
+                                                               Width="100"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Июнь" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding June}" 
+                                                               TextAlignment="Center"
+                                                               Width="100"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Июль" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding July}" 
+                                                               TextAlignment="Center"
+                                                               Width="100"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Август" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding August}" 
+                                                               TextAlignment="Center"
+                                                               Width="100"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Сентябрь" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding September}" 
+                                                               TextAlignment="Center"
+                                                               Width="100"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Октябрь" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding October}" 
+                                                               TextAlignment="Center"
+                                                               Width="100"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Ноябрь" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding November}" 
+                                                               TextAlignment="Center"
+                                                               Width="100"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Декабрь" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding December}" 
+                                                               TextAlignment="Center"
+                                                               Width="100"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn Header="Итого" Width="100">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Total}" 
+                                                               TextAlignment="Center"
+                                                               Width="100"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        <Setter Property="VerticalContentAlignment" Value="Top"/>
+                                        <Setter Property="Padding" Value="5"/>
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                            </ListView>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Page>

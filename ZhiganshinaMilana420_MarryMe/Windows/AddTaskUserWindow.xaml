@@ -1,0 +1,141 @@
+﻿<Window x:Class="ZhiganshinaMilana420_MarryMe.Windows.AddTaskUserWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ZhiganshinaMilana420_MarryMe.Windows"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        MouseDown="Window_MouseDown"
+        Title="Добавление задачи" 
+        Height="550" 
+        Width="630"
+        AllowsTransparency="True"
+        Background="Transparent">
+
+    <!-- Свадебный бордер с цветочным узором -->
+    <Border BorderThickness="3" CornerRadius="10" Background="White" Margin="10">
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                <GradientStop Color="#FFD3D3D3" Offset="0.0"/>
+                <GradientStop Color="#FFAEAEAE" Offset="0.5"/>
+                <GradientStop Color="#FFD3D3D3" Offset="1.0"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+
+        <!-- Внутренний бордер с цветочным узором -->
+        <Border BorderThickness="1" CornerRadius="8" Margin="2">
+            <Border.BorderBrush>
+                <VisualBrush TileMode="Tile" Viewport="0,0,50,50" ViewportUnits="Absolute">
+                    <VisualBrush.Visual>
+                        <Path Data="M12,0 L15,8 L23,8 L17,13 L20,20 L12,15 L5,20 L8,13 L2,8 L10,8 Z" 
+                              Fill="#909478" Stretch="Uniform"/>
+                    </VisualBrush.Visual>
+                </VisualBrush>
+            </Border.BorderBrush>
+
+            <!-- Основное содержимое -->
+            <Grid Margin="20" Background="White">
+                <!-- Close Button -->
+                <Button x:Name="ClouseBtt"
+                        Width="25" 
+                        Height="25"
+                        Content="✕"
+                        FontSize="10"
+                        Background="#909478"
+                        Foreground="White"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Click="ClouseBtt_Click"
+                        BorderBrush="Transparent">
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Grid>
+                                <Ellipse Fill="{TemplateBinding Background}" 
+                                         Stroke="{TemplateBinding BorderBrush}"
+                                         StrokeThickness="{TemplateBinding BorderThickness}"/>
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+                <!-- Main Content -->
+                <StackPanel Orientation="Vertical"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="550">
+
+                    <!-- Title with floral decoration -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0 0 0 20">
+                        <Path Data="M0,5 L10,5 L5,0 Z" Fill="#909478" Stretch="Uniform" Width="20" Margin="0 0 10 0"/>
+                        <TextBlock Text="Добавление задачи"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="#909478"/>
+                        <Path Data="M0,0 L5,5 L10,0 Z" Fill="#909478" Stretch="Uniform" Width="20" Margin="10 0 0 0"/>
+                    </StackPanel>
+
+                    <!-- Employee Name -->
+                    <TextBlock x:Name="NameEmployeeTb"
+                               FontSize="18"
+                               Foreground="#909478"
+                               HorizontalAlignment="Center"
+                               Margin="0 0 0 20"/>
+
+                    <!-- Task Description -->
+                    <StackPanel Orientation="Vertical" Margin="0 0 0 20">
+                        <TextBlock Text="Описание задачи"
+                                   FontSize="16"
+                                   Margin="0 0 0 5"/>
+                        <TextBox x:Name="DescriptionTb"
+                                 Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                                 Height="150"
+                                 FontSize="15"
+                                 TextWrapping="Wrap"
+                                 AcceptsReturn="True"
+                                 VerticalContentAlignment="Top"
+                                 HorizontalContentAlignment="Left"
+                                 VerticalScrollBarVisibility="Auto"
+                                 SpellCheck.IsEnabled="True"
+                                 Language="ru-RU"
+                                 BorderBrush="#909478"/>
+                    </StackPanel>
+
+                    <!-- Due Date -->
+                    <StackPanel Orientation="Vertical" Margin="0 0 0 30">
+                        <TextBlock Text="Срок реализации задачи"
+                                   FontSize="16"
+                                   Margin="0 0 0 5"/>
+                        <DatePicker x:Name="DateEndDp"
+                                    Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                    Height="50"
+                                    FontSize="12"
+                                    DisplayDateStart="{x:Static sys:DateTime.Today}"
+                                    CalendarOpened="DateEndDp_CalendarOpened"
+                                    BorderBrush="#909478"/>
+                    </StackPanel>
+
+                    <!-- Save Button -->
+                    <Button x:Name="AddTaksUserBt"
+                            Width="180"
+                            Height="45"
+                            FontSize="16"
+                            Content="Сохранить" 
+                            Style="{StaticResource MaterialDesignRaisedButton}"
+                            Background="#909478"
+                            Foreground="White"
+                            HorizontalAlignment="Right"
+                            Click="AddTaksUserBt_Click">
+                        <Button.Effect>
+                            <DropShadowEffect Color="#909478" BlurRadius="10" ShadowDepth="3"/>
+                        </Button.Effect>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Border>
+</Window>
