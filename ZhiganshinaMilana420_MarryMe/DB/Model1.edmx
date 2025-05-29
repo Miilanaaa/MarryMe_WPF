@@ -136,6 +136,8 @@
           <Property Name="MaterialsPath" Type="nvarchar(max)" />
           <Property Name="NumberGuests" Type="int" />
           <Property Name="WeddingBudget" Type="int" />
+          <Property Name="Login" Type="int" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="CoupleFavorites">
           <Key>
@@ -1578,6 +1580,8 @@
           <Property Name="MaterialsPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="NumberGuests" Type="Int32" />
           <Property Name="WeddingBudget" Type="Int32" />
+          <Property Name="Login" Type="Int32" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Bride" Relationship="Self.FK__Couple__BrideId__403A8C7D" FromRole="Couple" ToRole="Bride" />
           <NavigationProperty Name="Gromm" Relationship="Self.FK__Couple__GroomId__412EB0B6" FromRole="Couple" ToRole="Gromm" />
           <NavigationProperty Name="CoupleFavorites" Relationship="Self.FK__CoupleFav__Coupl__6D0D32F4" FromRole="Couple" ToRole="CoupleFavorites" />
@@ -3097,6 +3101,8 @@
                 <ScalarProperty Name="MaterialsPath" ColumnName="MaterialsPath" />
                 <ScalarProperty Name="NumberGuests" ColumnName="NumberGuests" />
                 <ScalarProperty Name="WeddingBudget" ColumnName="WeddingBudget" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

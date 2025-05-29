@@ -36,6 +36,8 @@ namespace ZhiganshinaMilana420_MarryMe.DB
         public string MaterialsPath { get; set; }
         public Nullable<int> NumberGuests { get; set; }
         public Nullable<int> WeddingBudget { get; set; }
+        public Nullable<int> Login { get; set; }
+        public string Password { get; set; }
     
         public virtual Bride Bride { get; set; }
         public virtual Gromm Gromm { get; set; }
