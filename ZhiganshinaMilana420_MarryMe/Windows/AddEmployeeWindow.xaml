@@ -12,8 +12,7 @@
         Width="800"
         AllowsTransparency="True"
         Background="Transparent"
-        MouseDown="Window_MouseDown"
-        >
+        MouseDown="Window_MouseDown">
 
     <!-- Свадебный бордер с цветочным узором -->
     <Border BorderThickness="3" CornerRadius="10" Background="White" Margin="10">
@@ -190,6 +189,7 @@
                             <DatePicker x:Name="BirthDateDp"
                                         Style="{StaticResource MaterialDesignOutlinedDatePicker}"
                                         Height="50"
+                                        Language="ru-Ru"
                                         Margin="0 0 10 15"
                                         BorderBrush="#909478"/>
                         </StackPanel>

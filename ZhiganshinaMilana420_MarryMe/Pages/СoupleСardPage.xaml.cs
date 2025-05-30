@@ -48,6 +48,7 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
             public int Price { get; set; }
             public string Date { get; set; }
             public Visibility CancelButtonVisibility { get; set; }
+            public Visibility SelectButtonVisibility { get; set; } // Добавьте это
             public Visibility AdminButtonsVisibility { get; set; }
         }
 
@@ -65,7 +66,7 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
             contextCouple = couple ?? throw new ArgumentNullException(nameof(couple));
             Couple1 = couple;
             Cou = couple;
-
+            bool isAdmin = UserInfo.User?.RoleId == 2;
             try
             {
                 var groom = DbConnection.MarryMe.Gromm.FirstOrDefault(g => g.Id == couple.GroomId);
@@ -87,11 +88,10 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
 
             }
 
-            if (UserInfo.User.RoleId == 2)
+            if (isAdmin)
             {
                 SeatingNavigateBt.Visibility = Visibility.Visible;
                 GenerateContractBt.Visibility = Visibility.Visible;
-
             }
             else
             {
@@ -153,7 +153,6 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
         {
             try
             {
-
                 bool isAdmin = UserInfo.User?.RoleId == 2; // Проверяем роль пользователя
                 var adminButtonsVisibility = isAdmin ? Visibility.Visible : Visibility.Collapsed;
 
@@ -176,7 +175,7 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
                     restaurantDate = restaurantBooking.BookingDate.ToString("dd.MM.yyyy");
                     restaurantPrice = restaurant != null ? (int)restaurant.Price : 0;
                     restaurantMenuPrice = restaurantBooking != null ? (int)restaurantBooking.MenuPrice : 0;
-                    restaurantFinalPrice = restaurantPrice + (restaurantMenuPrice * (contextCouple.NumberGuests ?? 0));
+                    restaurantFinalPrice = restaurantPrice + restaurantMenuPrice;
                 }
 
                 // Декорации

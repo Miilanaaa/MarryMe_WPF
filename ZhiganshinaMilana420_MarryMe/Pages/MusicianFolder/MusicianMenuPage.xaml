@@ -54,6 +54,7 @@
                             Style="{StaticResource MaterialDesignOutlinedDatePicker}"
                             Width="200"
                             Height="50"
+                            Language="ru-Ru"
                             FontSize="14"
                             Margin="10"
                             materialDesign:HintAssist.Hint="Дата бронирования"

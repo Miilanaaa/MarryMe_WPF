@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ZhiganshinaMilana420_MarryMe.Pages;
 
 namespace ZhiganshinaMilana420_MarryMe.DB
 {
@@ -14,5 +15,7 @@ namespace ZhiganshinaMilana420_MarryMe.DB
         {
             get { return Dismissed == false; }
         }
+
+        public bool IsAdmin => UserInfo.User?.RoleId == 1;
     }
 }

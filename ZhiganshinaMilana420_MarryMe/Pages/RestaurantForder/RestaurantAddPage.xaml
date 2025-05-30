@@ -24,12 +24,12 @@
                 Background="White"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Height="520"
+                Height="560"
                 Margin="30 30 0 0"
                 Effect="{StaticResource MaterialDesignShadowDepth1}">
 
             <StackPanel Orientation="Vertical"
-                        Margin="30 30 30 30">
+                        Margin="30 10 30 30">
                 <!-- Название -->
                 <StackPanel Orientation="Horizontal" 
                             VerticalAlignment="Center">
@@ -207,12 +207,11 @@
                 </StackPanel>
             </StackPanel>
         </Border>
-
         <!-- Меню -->
         <StackPanel Orientation="Horizontal" 
                     HorizontalAlignment="Left"
                     VerticalAlignment="Bottom"
-                    Margin="50 0 0 120">
+                    Margin="40 0 0 100">
             <Button x:Name="AddMenuBt"
                     Style="{StaticResource MaterialDesignRaisedButton}"
                     Background="#909478"

@@ -84,7 +84,7 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
         Users contextUsers;
 
         private int currentCouplePage = 1;
-        private const int couplesPerPage = 4; // Количество пар на странице
+        private const int couplesPerPage = 3; // Количество пар на странице
         private int totalCouplePages;
         private List<Couple> allCouples = new List<Couple>();
         public HomePage(Users users)
@@ -255,102 +255,102 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
         }
 
         private void InitializeCouplePagination()
-{
-    // Вычисляем общее количество страниц
-    totalCouplePages = (int)Math.Ceiling((double)allCouples.Count / couplesPerPage);
+        {
+            // Вычисляем общее количество страниц
+            totalCouplePages = (int)Math.Ceiling((double)allCouples.Count / couplesPerPage);
     
-    // Очищаем панель пагинации
-    CouplePaginationPanel.Children.Clear();
-    CouplePaginationPanel.Children.Add(CouplePrevPageBtn);
+            // Очищаем панель пагинации
+            CouplePaginationPanel.Children.Clear();
+            CouplePaginationPanel.Children.Add(CouplePrevPageBtn);
 
-    // Создаем кнопки для каждой страницы
-    for (int i = 1; i <= totalCouplePages; i++)
-    {
-        var pageBtn = new Button
-        {
-            Content = i.ToString(),
-            Width = 30,
-            Height = 30,
-            FontSize = 12,
-            Margin = new Thickness(2, 0, 2, 0),
-            Tag = i
-        };
-        pageBtn.Click += CouplePageBtn_Click;
+            // Создаем кнопки для каждой страницы
+            for (int i = 1; i <= totalCouplePages; i++)
+            {
+                var pageBtn = new Button
+                {
+                    Content = i.ToString(),
+                    Width = 30,
+                    Height = 30,
+                    FontSize = 12,
+                    Margin = new Thickness(2, 0, 2, 0),
+                    Tag = i
+                };
+                pageBtn.Click += CouplePageBtn_Click;
 
-        if (i == currentCouplePage)
-        {
-            pageBtn.Background = Brushes.LightGray;
+                if (i == currentCouplePage)
+                {
+                    pageBtn.Background = Brushes.LightGray;
+                }
+
+                CouplePaginationPanel.Children.Add(pageBtn);
+            }
+
+            CouplePaginationPanel.Children.Add(CoupleNextPageBtn);
+
+            // Загружаем данные для текущей страницы
+            LoadCouplePageData();
         }
 
-        CouplePaginationPanel.Children.Add(pageBtn);
-    }
-
-    CouplePaginationPanel.Children.Add(CoupleNextPageBtn);
-
-    // Загружаем данные для текущей страницы
-    LoadCouplePageData();
-}
-
-private void LoadCouplePageData()
-{
-    // Получаем пары для текущей страницы
-    var displayedCouples = allCouples
-        .Skip((currentCouplePage - 1) * couplesPerPage)
-        .Take(couplesPerPage)
-        .ToList();
-
-    CoupleLV.ItemsSource = displayedCouples;
-
-    // Обновляем состояние кнопок
-    UpdateCouplePaginationButtons();
-
-    // Обновляем видимость кнопок договоров
-    if (CoupleLV.IsLoaded)
-    {
-        CoupleLV_Loaded(null, null);
-    }
-}
-
-private void UpdateCouplePaginationButtons()
-{
-    foreach (var child in CouplePaginationPanel.Children)
-    {
-        if (child is Button btn && btn.Tag is int pageNumber)
+        private void LoadCouplePageData()
         {
-            btn.Background = pageNumber == currentCouplePage ? Brushes.LightGray : Brushes.Transparent;
+            // Получаем пары для текущей страницы
+            var displayedCouples = allCouples
+                .Skip((currentCouplePage - 1) * couplesPerPage)
+                .Take(couplesPerPage)
+                .ToList();
+
+            CoupleLV.ItemsSource = displayedCouples;
+
+            // Обновляем состояние кнопок
+            UpdateCouplePaginationButtons();
+
+            // Обновляем видимость кнопок договоров
+            if (CoupleLV.IsLoaded)
+            {
+                CoupleLV_Loaded(null, null);
+            }
         }
-    }
 
-    CouplePrevPageBtn.IsEnabled = currentCouplePage > 1;
-    CoupleNextPageBtn.IsEnabled = currentCouplePage < totalCouplePages;
-}
+        private void UpdateCouplePaginationButtons()
+        {
+            foreach (var child in CouplePaginationPanel.Children)
+            {
+                if (child is Button btn && btn.Tag is int pageNumber)
+                {
+                    btn.Background = pageNumber == currentCouplePage ? Brushes.LightGray : Brushes.Transparent;
+                }
+            }
 
-private void CouplePageBtn_Click(object sender, RoutedEventArgs e)
-{
-    if (sender is Button btn && btn.Tag is int pageNumber)
-    {
-        currentCouplePage = pageNumber;
-        LoadCouplePageData();
-    }
-}
+            CouplePrevPageBtn.IsEnabled = currentCouplePage > 1;
+            CoupleNextPageBtn.IsEnabled = currentCouplePage < totalCouplePages;
+        }
 
-private void CouplePrevPageBtn_Click(object sender, RoutedEventArgs e)
-{
-    if (currentCouplePage > 1)
-    {
-        currentCouplePage--;
-        LoadCouplePageData();
-    }
-}
+        private void CouplePageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn && btn.Tag is int pageNumber)
+            {
+                currentCouplePage = pageNumber;
+                LoadCouplePageData();
+            }
+        }
 
-private void CoupleNextPageBtn_Click(object sender, RoutedEventArgs e)
-{
-    if (currentCouplePage < totalCouplePages)
-    {
-        currentCouplePage++;
-        LoadCouplePageData();
-    }
-}
+        private void CouplePrevPageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentCouplePage > 1)
+            {
+                currentCouplePage--;
+                LoadCouplePageData();
+            }
+        }
+
+        private void CoupleNextPageBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentCouplePage < totalCouplePages)
+            {
+                currentCouplePage++;
+                LoadCouplePageData();
+            }
+        }
 
         private void CoupleLV_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

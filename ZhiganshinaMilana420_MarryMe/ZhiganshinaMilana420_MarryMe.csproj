@@ -643,6 +643,9 @@
     <Compile Include="Windows\AddTaskUserWindow.xaml.cs">
       <DependentUpon>AddTaskUserWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\AssignManagerWindow.xaml.cs">
+      <DependentUpon>AssignManagerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Windows\DismissalWindow.xaml.cs">
       <DependentUpon>DismissalWindow.xaml</DependentUpon>
     </Compile>
@@ -976,6 +979,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Windows\AddTaskUserWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Windows\AssignManagerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

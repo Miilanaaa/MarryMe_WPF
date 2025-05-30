@@ -5,11 +5,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using ZhiganshinaMilana420_MarryMe.DB;
+using ZhiganshinaMilana420_MarryMe.Windows;
 
 namespace ZhiganshinaMilana420_MarryMe.Pages
 {
     public partial class ClientMenuPage : Page
     {
+        public bool IsAdmin => UserInfo.User?.RoleId == 1;
         public static List<Couple> couples { get; set; }
         public static List<Gromm> gromms { get; set; }
         public static List<Bride> brides { get; set; }
@@ -33,8 +35,9 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
             SearchTb.TextChanged += UpdateData;
             FilterCb.SelectionChanged += UpdateData;
             DateTaskDp.SelectedDateChanged += UpdateData;
-        }
+            
 
+        }
 
 
         private void LoadData()
@@ -49,41 +52,34 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
 
         private void UpdateData(object sender, EventArgs e)
         {
-            var filteredCouples = DbConnection.MarryMe.Couple.AsQueryable(); // Берем данные из БД каждый раз
+            var query = DbConnection.MarryMe.Couple.AsQueryable();
 
             // Фильтрация по поиску
             if (!string.IsNullOrWhiteSpace(SearchTb.Text))
             {
-                var searchText = SearchTb.Text.ToLower();
-                filteredCouples = filteredCouples.Where(c =>
-                    (c.Gromm.Surname != null && c.Gromm.Surname.ToLower().Contains(searchText)) ||
-                    (c.Gromm.Name != null && c.Gromm.Name.ToLower().Contains(searchText)) ||
-                    (c.Gromm.Patronymic != null && c.Gromm.Patronymic.ToLower().Contains(searchText)) ||
-                    (c.Bride.Surname != null && c.Bride.Surname.ToLower().Contains(searchText)) ||
-                    (c.Bride.Name != null && c.Bride.Name.ToLower().Contains(searchText)) ||
-                    (c.Bride.Patronymic != null && c.Bride.Patronymic.ToLower().Contains(searchText)));
+                string searchText = SearchTb.Text.ToLower();
+                query = query.Where(c =>
+                    c.Gromm.Surname.ToLower().Contains(searchText) ||
+                    c.Gromm.Name.ToLower().Contains(searchText) ||
+                    c.Bride.Surname.ToLower().Contains(searchText) ||
+                    c.Bride.Name.ToLower().Contains(searchText));
             }
 
             // Фильтрация по статусу
-            if (FilterCb.SelectedItem is WeddingStatus selectedStatus)
+            if (FilterCb.SelectedItem is WeddingStatus status)
             {
-                filteredCouples = filteredCouples.Where(c => c.WeddingStatusId == selectedStatus.Id);
+                query = query.Where(c => c.WeddingStatusId == status.Id);
             }
 
             // Фильтрация по дате
             if (DateTaskDp.SelectedDate.HasValue)
             {
-                var selectedDate = DateTaskDp.SelectedDate.Value;
-                filteredCouples = filteredCouples.Where(c => c.WeddingDate == selectedDate);
+                query = query.Where(c => c.WeddingDate == DateTaskDp.SelectedDate.Value);
             }
 
-            // Обновляем список всех пар с учетом фильтров
-            allCouples = filteredCouples.OrderBy(c => c.WeddingDate).ToList();
-
-            // Сбрасываем на первую страницу при изменении фильтров
+            // Применяем фильтры и обновляем список
+            allCouples = query.OrderBy(c => c.WeddingDate).ToList();
             currentCouplePage = 1;
-
-            // Инициализируем пагинацию
             InitializeCouplePagination();
         }
         private void InitializeCouplePagination()
@@ -334,6 +330,47 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
                 {
                     MessageBox.Show($"Ошибка: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
+            }
+        }
+
+        private void AssignManagerBtt_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var couple = button.DataContext as Couple;
+
+            if (couple.WeddingDate == null)
+            {
+                MessageBox.Show("У пары не указана дата свадьбы!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            AssignManagerWindow assignManagerWindow = new AssignManagerWindow(couple.WeddingDate.Value, couple);
+            assignManagerWindow.ShowDialog();
+
+            // Обновляем данные после закрытия окна
+            if (assignManagerWindow.DialogResult == true)
+            {
+                LoadData();
+            }
+        }
+        private void ChangeManagerBtt_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as Button;
+            var couple = button.DataContext as Couple;
+
+            if (couple.WeddingDate == null)
+            {
+                MessageBox.Show("У пары не указана дата свадьбы!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            AssignManagerWindow assignManagerWindow = new AssignManagerWindow(couple.WeddingDate.Value, couple);
+            assignManagerWindow.ShowDialog();
+
+            // Обновляем данные после закрытия окна
+            if (assignManagerWindow.DialogResult == true)
+            {
+                LoadData();
             }
         }
     }

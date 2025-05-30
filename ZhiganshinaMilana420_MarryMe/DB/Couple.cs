@@ -38,11 +38,13 @@ namespace ZhiganshinaMilana420_MarryMe.DB
         public Nullable<int> WeddingBudget { get; set; }
         public Nullable<int> Login { get; set; }
         public string Password { get; set; }
+        public Nullable<int> IdUser { get; set; }
     
         public virtual Bride Bride { get; set; }
         public virtual Gromm Gromm { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CoupleFavorites> CoupleFavorites { get; set; }
+        public virtual Users Users { get; set; }
         public virtual WeddingStatus WeddingStatus { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<HostBookingDates> HostBookingDates { get; set; }

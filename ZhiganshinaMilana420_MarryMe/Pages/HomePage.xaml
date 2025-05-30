@@ -56,7 +56,7 @@
         <!-- Стиль для карточек пар -->
         <Style TargetType="Border" x:Key="CoupleCardStyle">
             <Setter Property="Width" Value="600"/>
-            <Setter Property="Height" Value="120"/>
+            <Setter Property="Height" Value="160"/>
             <Setter Property="Background" Value="#909478"/>
             <Setter Property="CornerRadius" Value="15"/>
             <Setter Property="Effect">
@@ -120,7 +120,7 @@
                         Padding="10" Height="575">
                     <ListView x:Name="CoupleLV"
                               Loaded="CoupleLV_Loaded"
-                              d:ItemsSource="{d:SampleData ItemCount=4}"
+                              d:ItemsSource="{d:SampleData ItemCount=3}"
                               Height="580"
                               SelectionChanged="CoupleLV_SelectionChanged"
                               ScrollViewer.HorizontalScrollBarVisibility="Disabled">
@@ -198,6 +198,29 @@
                                                             Click="MaterialsButton_Click"
                                                             Tag="{Binding}"/>
                                                 </StackPanel>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal"
+                                                        Margin="5 0 0 0">
+                                                <Ellipse Width="50"
+                                                         Height="50"
+                                                         Grid.Column="0"
+                                                         Margin="0 0 10 0"
+                                                         VerticalAlignment="Center">
+                                                    <Ellipse.Fill>
+                                                        <ImageBrush ImageSource="{Binding Users.Photo}"
+                                                                    Stretch="UniformToFill"/>
+                                                    </Ellipse.Fill>
+                                                </Ellipse>
+                                                <TextBlock Text="{Binding Users.Surname}"
+                                                           Foreground="White"
+                                                           FontSize="16"
+                                                           FontWeight="Medium"
+                                                           Margin="0 14 0 0"/>
+                                                <TextBlock Text="{Binding Users.Name}"
+                                                           Foreground="White"
+                                                           FontSize="16"
+                                                           FontWeight="Medium"
+                                                           Margin="5 14 0 0"/>
                                             </StackPanel>
                                         </StackPanel>
                                     </Border>

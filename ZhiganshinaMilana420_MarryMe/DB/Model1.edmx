@@ -138,6 +138,7 @@
           <Property Name="WeddingBudget" Type="int" />
           <Property Name="Login" Type="int" />
           <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="IdUser" Type="int" />
         </EntityType>
         <EntityType Name="CoupleFavorites">
           <Key>
@@ -947,6 +948,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Couple_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Couple" Type="Self.Couple" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Couple">
+              <PropertyRef Name="IdUser" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Couple_WeddingStatus">
           <End Role="WeddingStatus" Type="Self.WeddingStatus" Multiplicity="0..1" />
           <End Role="Couple" Type="Self.Couple" Multiplicity="*" />
@@ -1354,6 +1367,10 @@
             <End Role="Cake" EntitySet="Cake" />
             <End Role="CakePhoto" EntitySet="CakePhoto" />
           </AssociationSet>
+          <AssociationSet Name="FK_Couple_Users" Association="Self.FK_Couple_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Couple" EntitySet="Couple" />
+          </AssociationSet>
           <AssociationSet Name="FK_Couple_WeddingStatus" Association="Self.FK_Couple_WeddingStatus">
             <End Role="WeddingStatus" EntitySet="WeddingStatus" />
             <End Role="Couple" EntitySet="Couple" />
@@ -1582,9 +1599,11 @@
           <Property Name="WeddingBudget" Type="Int32" />
           <Property Name="Login" Type="Int32" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IdUser" Type="Int32" />
           <NavigationProperty Name="Bride" Relationship="Self.FK__Couple__BrideId__403A8C7D" FromRole="Couple" ToRole="Bride" />
           <NavigationProperty Name="Gromm" Relationship="Self.FK__Couple__GroomId__412EB0B6" FromRole="Couple" ToRole="Gromm" />
           <NavigationProperty Name="CoupleFavorites" Relationship="Self.FK__CoupleFav__Coupl__6D0D32F4" FromRole="Couple" ToRole="CoupleFavorites" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Couple_Users" FromRole="Couple" ToRole="Users" />
           <NavigationProperty Name="WeddingStatus" Relationship="Self.FK_Couple_WeddingStatus" FromRole="Couple" ToRole="WeddingStatus" />
           <NavigationProperty Name="HostBookingDates" Relationship="Self.FK_HostBookingDates_Couple" FromRole="Couple" ToRole="HostBookingDates" />
           <NavigationProperty Name="MusicianBookingDates" Relationship="Self.FK_MusicianBookingDates_Couple" FromRole="Couple" ToRole="MusicianBookingDates" />
@@ -2010,6 +2029,7 @@
           <Property Name="Dismissed" Type="Boolean" />
           <Property Name="DeviceDate" Type="DateTime" Precision="0" />
           <Property Name="DateDismissal" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Couple" Relationship="Self.FK_Couple_Users" FromRole="Users" ToRole="Couple" />
           <NavigationProperty Name="Gender" Relationship="Self.FK_Users_Gender" FromRole="Users" ToRole="Gender" />
           <NavigationProperty Name="Role" Relationship="Self.FK__Users__RoleId__398D8EEE" FromRole="Users" ToRole="Role" />
           <NavigationProperty Name="TaskUsers" Relationship="Self.FK_TaskUsers_Users" FromRole="Users" ToRole="TaskUsers" />
@@ -2207,6 +2227,18 @@
             </Principal>
             <Dependent Role="CoupleFavorites">
               <PropertyRef Name="CoupleId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Couple_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Couple" Type="Self.Couple" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Couple">
+              <PropertyRef Name="IdUser" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2799,6 +2831,10 @@
             <End Role="Couple" EntitySet="Couple" />
             <End Role="CoupleFavorites" EntitySet="CoupleFavorites" />
           </AssociationSet>
+          <AssociationSet Name="FK_Couple_Users" Association="Self.FK_Couple_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Couple" EntitySet="Couple" />
+          </AssociationSet>
           <AssociationSet Name="FK_Couple_WeddingStatus" Association="Self.FK_Couple_WeddingStatus">
             <End Role="WeddingStatus" EntitySet="WeddingStatus" />
             <End Role="Couple" EntitySet="Couple" />
@@ -3103,6 +3139,7 @@
                 <ScalarProperty Name="WeddingBudget" ColumnName="WeddingBudget" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

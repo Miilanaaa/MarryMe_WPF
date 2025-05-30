@@ -85,6 +85,28 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
         {
             if (sender is Button button && button.DataContext is Users employee)
             {
+                // Проверяем, есть ли у сотрудника активные пары
+                var activeCouples = DbConnection.MarryMe.Couple
+                    .Where(c => c.IdUser == employee.Id &&
+                           (c.WeddingStatusId == 1)) // 1 - активная, 2 - завершенная
+                    .ToList();
+
+                if (activeCouples.Any())
+                {
+                    string message = $"У сотрудника есть активные или завершенные пары:\n";
+                    foreach (var couple in activeCouples)
+                    {
+                        message += $"- Пара {couple.Bride.Surname} {couple.Bride.Name} и {couple.Gromm.Surname} {couple.Gromm.Name} (Статус: {couple.WeddingStatus.Name})\n";
+                    }
+                    message += "\nСначала переназначьте менеджеров для этих пар.";
+
+                    MessageBox.Show(message,
+                                  "Невозможно уволить сотрудника",
+                                  MessageBoxButton.OK,
+                                  MessageBoxImage.Warning);
+                    return;
+                }
+
                 // Создаем окно подтверждения с указанием причины увольнения
                 var dismissalWindow = new DismissalWindow(employee);
                 if (dismissalWindow.ShowDialog() == true)

@@ -180,7 +180,7 @@ namespace ZhiganshinaMilana420_MarryMe.Pages
                 // Couple info
                 couple.BrideId = bride.Id;
                 couple.GroomId = gromm.Id;
-                couple.WeddingStatusId = 1;
+                couple.WeddingStatusId = 4;
                 couple.NumberGuests = Convert.ToInt32(CountGuestsTb.Text);
                 couple.WeddingBudget = Convert.ToInt32(WeddingBudgetTb.Text);
                 couple.WeddingDate = Convert.ToDateTime(DateDp.Text);

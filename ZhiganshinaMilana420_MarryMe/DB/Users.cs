@@ -17,6 +17,7 @@ namespace ZhiganshinaMilana420_MarryMe.DB
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Users()
         {
+            this.Couple = new HashSet<Couple>();
             this.TaskUsers = new HashSet<TaskUsers>();
         }
     
@@ -36,6 +37,8 @@ namespace ZhiganshinaMilana420_MarryMe.DB
         public Nullable<System.DateTime> DeviceDate { get; set; }
         public Nullable<System.DateTime> DateDismissal { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Couple> Couple { get; set; }
         public virtual Gender Gender { get; set; }
         public virtual Role Role { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

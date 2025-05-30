@@ -275,6 +275,7 @@
                     <DatePicker x:Name="DateDp"
                                 Style="{StaticResource MaterialDesignOutlinedDatePicker}"
                                 materialDesign:HintAssist.Hint="Дата свадьбы"
+                                Language="ru-Ru"
                                 DisplayDateStart="{x:Static sys:DateTime.Today}"
                                 Margin="0,0,0,20"/>
 

@@ -159,9 +159,10 @@
                         <!-- Дата рождения -->
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
                             <DatePicker x:Name="BirthDateDp"
-                                         Style="{StaticResource MaterialDesignOutlinedDatePicker}"
-                                         materialDesign:HintAssist.Hint="Дата рождения"
-                                         Width="300"/>
+                                        Language="ru-Ru"
+                                        Style="{StaticResource MaterialDesignOutlinedDatePicker}"
+                                        materialDesign:HintAssist.Hint="Дата рождения"
+                                        Width="300"/>
                         </StackPanel>
 
                         <!-- Логин и пароль -->

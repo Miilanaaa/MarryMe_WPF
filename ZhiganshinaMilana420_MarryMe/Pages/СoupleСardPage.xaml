@@ -162,11 +162,11 @@
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="40"/>
-                                            <ColumnDefinition Width="160"/>
-                                            <ColumnDefinition Width="180"/>
-                                            <ColumnDefinition Width="100"/>
-                                            <ColumnDefinition Width="120"/>
-                                            <ColumnDefinition Width="200"/>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="250"/>
+                                            <ColumnDefinition Width="130"/>
+                                            <ColumnDefinition Width="150"/>
+                                            <ColumnDefinition Width="220"/>
                                         </Grid.ColumnDefinitions>
 
                                         <TextBlock Text="{Binding Number}" 
@@ -175,6 +175,7 @@
                                                    TextWrapping="Wrap"/>
                                         <TextBlock Text="{Binding Category}" 
                                                    Grid.Column="1"
+                                                   Margin="30 0 0 0"
                                                    TextWrapping="Wrap"/>
                                         <TextBlock Text="{Binding Id}" 
                                                    Grid.Column="2"
